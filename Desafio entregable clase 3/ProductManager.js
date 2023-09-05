@@ -98,8 +98,8 @@ class ProductManager {
 
   async updateProductById(id, newProductInfo) {
     try {
-      if (newProductInfo.id) {
-        throw Error("Cannot change product id");
+      if (newProductInfo.id || newProductInfo.code) {
+        throw Error("Cannot change product id or code");
       }
 
       let product = { ...(await this.getProductById(id)) };
