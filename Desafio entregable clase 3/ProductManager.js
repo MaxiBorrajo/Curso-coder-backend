@@ -15,7 +15,9 @@ class ProductManager {
         (product) => product.code === newProduct.code
       );
 
-      if (!validProduct && repeatedCode) {
+      console.log(!validProduct)
+
+      if (!validProduct || repeatedCode) {
         return console.error(
           "Invalid product due to lack of information or repeated code"
         );
@@ -180,27 +182,29 @@ async function test() {
 
   await productManager.addProduct(newProduct);
 
-  console.log("producto añadido", await productManager.getProducts());
+  console.log("productos hasta ahora", await productManager.getProducts());
 
-  console.log(
-    "obtener producto por id = 1",
-    await productManager.getProductById(1)
-  );
+  // console.log("producto añadido", await productManager.getProducts());
 
-  await productManager.updateProductById(1, { title: "PRODUCTO DE PRUEBA" });
+  // console.log(
+  //   "obtener producto por id = 1",
+  //   await productManager.getProductById(1)
+  // );
 
-  console.log(
-    "producto actualizado con id = 1",
-    await productManager.getProductById(1)
-  );
+  // await productManager.updateProductById(1, { title: "PRODUCTO DE PRUEBA" });
 
-  //deberia fallar por intentar cambiar id
-  await productManager.updateProductById(1, { id: 2 });
+  // console.log(
+  //   "producto actualizado con id = 1",
+  //   await productManager.getProductById(1)
+  // );
 
-  await productManager.deleteProductById(1);
+  // //deberia fallar por intentar cambiar id
+  // await productManager.updateProductById(1, { id: 2 });
 
-  //deberia fallar porque el producto ya no existe
-  await productManager.getProductById(1);
+  // await productManager.deleteProductById(1);
+
+  // //deberia fallar porque el producto ya no existe
+  // await productManager.getProductById(1);
 }
 
 test();
