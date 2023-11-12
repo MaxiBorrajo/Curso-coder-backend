@@ -17,6 +17,8 @@ import {
 import "../middlewares/passportLocal.js";
 import "../middlewares/passportGithub.js";
 
+import { isAuthenticated } from "../middlewares/authenticationMiddleware.js";
+
 const router = express.Router();
 
 router.get(
@@ -62,6 +64,6 @@ router.post(
 
 router.delete("/", logout);
 
-router.get("/", getActualUser);
+router.get("/current", isAuthenticated, getActualUser);
 
 export default router;

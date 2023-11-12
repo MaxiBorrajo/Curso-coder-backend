@@ -12,7 +12,7 @@ const link = document.getElementById("link");
 
 let userData = JSON.parse(localStorage.getItem("user"));
 
-async function getActualUser(url = "http://localhost:8080/api/sessions") {
+async function getActualUser(url = "http://localhost:8080/api/sessions/current") {
   try {
     const response = await fetch(url);
     const responseJson = await response.json();

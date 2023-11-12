@@ -10,7 +10,7 @@ logoutButton.onclick = async (e) => {
 
 async function getData() {
   try {
-    const result = await fetch(`http://localhost:8080/api/users`, {
+    const result = await fetch(`http://localhost:8080/api/sessions/current`, {
       method: "GET",
     });
 

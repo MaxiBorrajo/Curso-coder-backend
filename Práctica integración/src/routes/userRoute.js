@@ -2,15 +2,12 @@ import express from "express";
 
 import {
   deleteUser,
-  updateCurrentUser,
-  getCurrentUser
+  updateCurrentUser
 } from "../controllers/userController.js";
 
 import { isAuthenticated } from "../middlewares/authenticationMiddleware.js";
 
 const router = express.Router();
-
-router.get("/", isAuthenticated, getCurrentUser);
 
 router.delete("/", deleteUser);
 

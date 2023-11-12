@@ -1,14 +1,6 @@
 import userManager from "../dao/DB/UserManager.js";
 import cartManager from "../dao/DB/CartManager.js";
 
-async function getCurrentUser(req, res, next){
-  try {
-    res.status(200).json({ message: req.user });
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function deleteUser(req, res, next) {
   try {
     const id = req.user._id;
@@ -40,4 +32,4 @@ async function updateCurrentUser(req, res, next){
   }
 }
 
-export { deleteUser, updateCurrentUser, getCurrentUser };
+export { deleteUser, updateCurrentUser };
