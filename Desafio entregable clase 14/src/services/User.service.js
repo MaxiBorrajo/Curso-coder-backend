@@ -19,6 +19,16 @@ class UserService extends BaseService {
       throw error;
     }
   }
+
+  async deleteById(id) {
+    try {
+      const deletedObject = await this.model.findByIdAndDelete(id);
+
+      return deletedObject;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new UserService();

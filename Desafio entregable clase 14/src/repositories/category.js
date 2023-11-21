@@ -1,6 +1,6 @@
 //imports
 import mongoose from "mongoose";
-
+import categorized from "./categorized";
 //schema
 const categorySchema = new mongoose.Schema(
   {
@@ -15,6 +15,15 @@ const categorySchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+categorySchema.pre("findOneAndDelete", async function (next) {
+  try {
+    await categorized.deleteMany({ idCategory: this._id });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const category = new mongoose.model("categories", categorySchema);
 

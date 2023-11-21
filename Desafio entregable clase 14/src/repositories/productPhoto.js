@@ -1,6 +1,6 @@
 //imports
 import mongoose from "mongoose";
-
+import uploadImagesMiddlware from "../middlewares/uploadImages.middleware";
 //schema
 const productPhotoSchema = new mongoose.Schema(
   {
@@ -23,6 +23,15 @@ const productPhotoSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+productPhotoSchema.pre([/^delete/, "findOneAndDelete"], async function (next) {
+  try {
+    await uploadImagesMiddlware.deleteImageInCloud(this.publicId);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const productPhoto = new mongoose.model("productPhotos", productPhotoSchema);
 

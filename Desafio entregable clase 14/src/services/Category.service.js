@@ -1,4 +1,5 @@
 import category from "../models/category.js";
+import categorized from "../models/categorized.js";
 import BaseService from "./base.service.js";
 
 class CategoryService extends BaseService {
@@ -7,25 +8,48 @@ class CategoryService extends BaseService {
   }
 
   async getProductsByCategory(idCategory, limit = 10, page = 1, sort = 0) {
-    const options = {
-      page: page,
-      limit: limit,
-      populate: "products",
-      customLabels: {
-        docs: "payload",
-      },
-    };
+    try {
+      const options = {
+        page: page,
+        limit: limit,
+        populate: "products",
+        customLabels: {
+          docs: "payload",
+        },
+      };
 
-    if (+sort) {
-      options.sort = { price: +sort };
+      if (+sort) {
+        options.sort = { price: +sort };
+      }
+
+      const foundObjects = await categorized.paginate(
+        { idCategory: idCategory },
+        options
+      );
+
+      return foundObjects;
+    } catch (error) {
+      console.error("Error en getProductsByCategory:", error);
+      throw new Error("Error al obtener los productos por categoria");
     }
+  }
 
-    const foundObjects = await this.model.paginate(
-      { _id: idCategory },
-      options
-    );
+  async addProductToCategory(data) {
+    try {
 
-    return foundObjects;
+      const foundProductInCategory = await categorized.find(data)
+
+      if(foundProductInCategory){
+        throw new Error("Product already in category");
+      }
+      
+      const addedProductToCategory = await categorized.create(data)
+
+      return addedProductToCategory
+    } catch (error) {
+      console.error("Error en addProductToCategory:", error);
+      throw new Error("Error al añadir product a categoria");
+    }
   }
 }
 

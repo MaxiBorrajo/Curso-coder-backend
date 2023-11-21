@@ -1,19 +1,15 @@
-import userManager from "../dao/DB/UserManager.js";
-import cartManager from "../dao/DB/CartManager.js";
+import userService from "../services/User.service";
 
-async function deleteUser(req, res, next) {
+async function deleteCurrentUser(req, res, next) {
   try {
-    const id = req.user._id;
-    
+    const uid = req.user._id;
+
     req.logout(async function (err) {
       if (err) {
         return next(err);
       }
-      await userManager.deleteById(id);
 
-      const foundCart = await cartManager.getByFilter({ userId: id });
-
-      await cartManager.deleteById(foundCart._id);
+      await userService.deleteById(uid);
 
       res.status(200).json({ message: "User deleted successfully" });
     });
@@ -22,14 +18,26 @@ async function deleteUser(req, res, next) {
   }
 }
 
-async function updateCurrentUser(req, res, next){
+async function updateCurrentUser(req, res, next) {
   try {
-    const updatedUser = userManager.updateById(req.user._id, req.body)
+    const uid = req.user._id;
 
-    res.status(200).send({message: updatedUser})
+    if (req.file) {
+      req.user = {
+        ...req.user,
+        ...{
+          urlProfilePhoto: req.file.url,
+          publidId: req.file.publidId,
+        },
+      };
+    }
+    
+    const updatedUser = userManager.updateById(uid, req.body);
+
+    res.status(200).send({ message: updatedUser });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
-export { deleteUser, updateCurrentUser };
+export { deleteCurrentUser, updateCurrentUser };

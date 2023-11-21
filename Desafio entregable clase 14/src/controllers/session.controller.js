@@ -1,17 +1,8 @@
-import userManager from "../dao/DB/UserManager.js";
-import cartManager from "../dao/DB/CartManager.js";
+import userService from "../services/User.service";
 
 async function register(req, res, next) {
   try {
-    const result = await userManager.create(req.body);
-
-    const userCreated = await userManager.getByFilter({
-      email: result.email,
-    });
-
-    await cartManager.create({
-      userId: userCreated._id,
-    });
+    const result = await userService.create(req.body);
 
     res.status(200).json({ message: result });
   } catch (error) {

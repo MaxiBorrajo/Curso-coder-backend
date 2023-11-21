@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import added from "../repositories/added.js";
+import buy from "../repositories/buys.js";
+import cart from "../repositories/cart.js";
+import comment from "../repositories/comment.js";
+import message from "../repositories/message.js";
+import uploadImagesMiddleware from "../middlewares/uploadImages.middleware.js";
+import cartService from "../services/cart.service.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -57,13 +64,37 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+userSchema.pre("findByIdAndDelete", async function (next) {
+  try {
+    const relationships = [added, buy, cart, comment, message];
+    for (const relation of relationships) {
+      await relation.deleteMany({ idUser: this._id });
+    }
+
+    if (this.publidId !== "x1vdmydenrkd3luzvjv6") {
+      await uploadImagesMiddleware.deleteImageInCloud(this.publicId);
+    }
+
     next();
-  } else {
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
+  }
+
+  next();
+});
+
+userSchema.post("save", async function () {
+  const foundCart = await cartService.getByFilter({ idUser: this._id });
+
+  if (!foundCart) {
+    await cartService.create({ idUser: this._id });
   }
 });
 
