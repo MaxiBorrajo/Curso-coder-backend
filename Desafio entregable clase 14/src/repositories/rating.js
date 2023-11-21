@@ -1,20 +1,24 @@
 //imports
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
 
 //schema
-const categorizedSchema = new mongoose.Schema(
+const ratingSchema = new mongoose.Schema(
   {
     idProduct: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "products",
       required: true,
     },
-    idCategory: {
+    idUser: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "categories",
+      ref: "users",
       required: true,
     },
+    rating: {
+        type: Number,
+        min: 0,
+        max: 5,
+      },
   },
   {
     timestamps: true,
@@ -22,8 +26,6 @@ const categorizedSchema = new mongoose.Schema(
   }
 );
 
-categorizedSchema.plugin(mongoosePaginate);
+const rating = new mongoose.model("ratings", ratingSchema);
 
-const categorized = new mongoose.model("categorized", categorizedSchema);
-
-export default categorized;
+export default rating;

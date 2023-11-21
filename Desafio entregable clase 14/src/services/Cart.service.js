@@ -1,38 +1,10 @@
 import BaseService from "./base.service.js";
 import cart from "../models/cart.js";
+import added from "../models/added.js";
 
 class CartService extends BaseService {
   constructor() {
     super(cart);
-  }
-
-  async addProductToCart(cartId, productId, quantity) {
-    try {
-      const foundCart = await this.model.findById(cartId);
-
-      if (!foundCart) {
-        throw new Error("Cart not found");
-      }
-
-      const foundProduct = foundCart.products.find(
-        (product) => product.productId.toString() === productId
-      );
-
-      if (foundProduct) {
-        foundProduct.quantity = foundProduct.quantity + +quantity;
-      } else {
-        foundCart.products = [
-          ...foundCart.products,
-          ...[{ productId: productId, quantity: quantity }],
-        ];
-      }
-
-      await foundCart.save();
-
-      return "Product added";
-    } catch (error) {
-      throw error;
-    }
   }
 
   async deleteProductFromCarts(productId) {

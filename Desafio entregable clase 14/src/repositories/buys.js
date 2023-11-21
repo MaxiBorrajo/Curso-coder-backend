@@ -19,11 +19,6 @@ const buysSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    rating: {
-      type: Number,
-      min: 0,
-      max: 5,
-    },
   },
   {
     timestamps: true,
