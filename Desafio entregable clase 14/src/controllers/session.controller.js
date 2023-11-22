@@ -4,6 +4,21 @@ async function register(req, res, next) {
   try {
     const result = await userService.create(req.body);
 
+    const response = {
+      token: userService.generateToken(result),
+      user: result
+    }
+
+    res.status(200).json({ message: response });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function login(req, res, next) {
+  try {
+    const result = await userService.login(req.body);
+
     res.status(200).json({ message: result });
   } catch (error) {
     next(error);
@@ -27,4 +42,4 @@ async function getActualUser(req, res, next) {
   }
 }
 
-export { logout, register, getActualUser };
+export { logout, register, getActualUser, login };

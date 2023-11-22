@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github2";
-import userManager from "../dao/DB/UserManager.js";
-import cartManager from "../dao/DB/CartManager.js";
+import userService from "../services/User.service";
 
 passport.use(
   new GitHubStrategy(
@@ -11,8 +10,9 @@ passport.use(
       callbackURL: "http://localhost:8080/api/sessions/github/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
+      console.log(profile._json);
       try {
-        let foundUser = await userManager.getByFilter({
+        let foundUser = await userService.getByFilter({
           email: profile._json.email,
         });
 
@@ -23,17 +23,9 @@ passport.use(
             oauthUser: true,
           };
 
-          const result = await userManager.create(newUser);
+          const result = await userService.create(newUser);
 
-          const userCreated = await userManager.getByFilter({
-            email: result.email,
-          });
-
-          await cartManager.create({
-            userId: userCreated._id,
-          });
-
-          return done(null, userCreated);
+          return done(null, result);
         } else {
           return done(null, foundUser);
         }
@@ -49,7 +41,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await userManager.getById(id);
+  const user = await userService.getById(id);
 
   done(null, user);
 });

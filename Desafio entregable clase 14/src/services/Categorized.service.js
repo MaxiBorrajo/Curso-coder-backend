@@ -14,7 +14,7 @@ class CategorizedService extends BaseService {
         throw new Error("Product already in category");
       }
 
-      const addedProductToCategory = await super(data);
+      const addedProductToCategory = await super.create(data);
 
       return addedProductToCategory;
     } catch (error) {

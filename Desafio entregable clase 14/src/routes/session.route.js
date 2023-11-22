@@ -14,8 +14,9 @@ import {
   getActualUser,
 } from "../controllers/sessionController.js";
 
-import "../middlewares/passportLocal.js";
-import "../middlewares/passportGithub.js";
+import "../middlewares/jwt.strategy.js";
+import "../middlewares/github.strategy.js";
+import "../middlewares/google.strategy.js";
 
 import { isAuthenticated } from "../middlewares/authenticationMiddleware.js";
 
@@ -27,8 +28,23 @@ router.get(
 );
 
 router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+router.get(
   "/github/callback",
   passport.authenticate("github", {
+    failureRedirect: "http://localhost:8080/login",
+  }),
+  (req, res, next) => {
+    res.redirect("http://localhost:8080/products?oauth=true");
+  }
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
     failureRedirect: "http://localhost:8080/login",
   }),
   (req, res, next) => {
