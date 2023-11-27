@@ -6,6 +6,7 @@ import {
   getProductById,
   getProducts,
   updateProductById,
+  getProductsOwnedByUser
 } from "../controllers/product.controller.js";
 
 import { body_must_contain_attributes } from "../middlewares/validationData.middleware.js";
@@ -17,6 +18,8 @@ import isAdmin from "../middlewares/checkRole.middleware.js";
 const router = express.Router();
 
 router.get("/", getProducts);
+
+router.get("/library", isAuthenticated, getProductsOwnedByUser);
 
 router.get("/:pid", getProductById);
 

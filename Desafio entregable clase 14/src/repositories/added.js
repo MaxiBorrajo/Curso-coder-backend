@@ -1,6 +1,6 @@
 //imports
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 //schema
 const addedSchema = new mongoose.Schema(
@@ -27,7 +27,7 @@ const addedSchema = new mongoose.Schema(
   }
 );
 
-addedSchema.plugin(mongoosePaginate);
+addedSchema.plugin(aggregatePaginate);
 
 const added = new mongoose.model("added", addedSchema);
 

@@ -1,4 +1,5 @@
 import productService from "../services/Product.service.js";
+import cartService from "../services/Cart.service.js";
 
 async function getProducts(req, res, next) {
   try {
@@ -107,10 +108,24 @@ async function deleteProductById(req, res, next) {
   }
 }
 
+async function getProductsOwnedByUser(req, res, next) {
+  try {
+    const uid = req.user._id;
+    const { limit } = req.query;
+
+    const result = await cartService.getProductsOwnedByUser(uid, limit);
+
+    res.status(200).json({ message: result });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export {
   addProduct,
   getProducts,
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductsOwnedByUser
 };

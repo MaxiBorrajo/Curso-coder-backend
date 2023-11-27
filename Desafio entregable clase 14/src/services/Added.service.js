@@ -1,6 +1,7 @@
 import BaseService from "./base.service.js";
 import added from "../repositories/added.js";
 import cart from "../repositories/cart.js";
+import cartService from "./Cart.service.js";
 
 class AddedService extends BaseService {
   constructor() {
@@ -9,10 +10,11 @@ class AddedService extends BaseService {
 
   async create(object) {
     try {
-      const foundProduct = await this.getByFilter(object);
+      const foundProduct = await this.model.findOne(object).populate({path:"idCart"});
 
       if (foundProduct) {
-        throw new Error("Product already added to cart");
+        const error = foundProduct.idCart.bought ? "Product already bought" : "Product already added to cart"
+        throw new Error(error);
       }
 
       const foundCart = await cart.findOne({

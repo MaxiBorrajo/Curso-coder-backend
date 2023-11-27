@@ -100,22 +100,9 @@ async function buyCart(req, res, next) {
 async function getHistoryBuysOfCurrentUser(req, res, next) {
   try {
     const uid = req.user._id;
-    const { page } = req.query;
+    const { limit } = req.query;
 
-    const history = await cartService.getHistoryOfBuys(uid, 10, page);
-
-    history.status = history.payload.length > 0 ? "success" : "error";
-
-    delete history.totalDocs;
-    delete history.limit;
-    delete history.pagingCounter;
-
-    history.prevLink = history.hasPrevPage
-      ? `http://localhost:8080/api/cart/history?page=${products.prevPage}`
-      : null;
-    history.nextLink = history.hasNextPage
-      ? `http://localhost:8080/api/cart/history?page=${products.nextPage}`
-      : null;
+    const history = await cartService.getHistoryOfBuys(uid, limit);
 
     res.status(200).json({ message: history });
   } catch (error) {

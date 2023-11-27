@@ -20,21 +20,63 @@ class CartService extends BaseService {
     }
   }
 
-  async getHistoryOfBuys(userId, limit, page) {
+  async getHistoryOfBuys(userId, limit = 10) {
     try {
-      const options = {
-        page: page,
-        limit: limit,
-        populate: "idProduct idCart",
-        customLabels: {
-          docs: "payload",
+      let aggregateQuery = await added.aggregate([
+        {
+          $match: { idUser: userId },
         },
-        sort: { createdAt: -1 },
-      };
+        {
+          $sort: { createdAt: -1 },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "idProduct",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        {
+          $group: {
+            _id: "$idCart",
+            totalPrice: { $sum: { $sum: "$product.price" } },
+            products: { $push: "$product" },
+          },
+        },
+        {
+          $lookup: {
+            from: "carts",
+            localField: "_id",
+            foreignField: "_id",
+            as: "_id",
+          },
+        },
+        {
+          $limit: +limit,
+        },
+      ]);
 
-      const boughtCarts = await added.paginate({ idUser: userId }, options)
+      aggregateQuery = aggregateQuery.filter((buy) => {
+        return buy._id[0].bought;
+      });
 
-      return boughtCarts;
+      return aggregateQuery;
+    } catch (error) {
+      console.error("Error en getHistoryOfBuys:", error);
+      throw new Error("Error al obtener el historial de compras");
+    }
+  }
+
+  async getProductsOwnedByUser(userId, limit = 10) {
+    try {
+      const history = await this.getHistoryOfBuys(userId, limit);
+
+      let products = history.map((boughts) => boughts.products);
+
+      products = products.flat(Infinity)
+      
+      return products;
     } catch (error) {
       console.error("Error en getHistoryOfBuys:", error);
       throw new Error("Error al obtener el historial de compras");
@@ -47,9 +89,9 @@ class CartService extends BaseService {
         idUser: userId,
         idProduct: productId,
       });
-      
-      if(!foundAdded) {
-        return foundAdded
+
+      if (!foundAdded) {
+        return foundAdded;
       }
 
       const foundCart = await this.getById(foundAdded.idCart);
