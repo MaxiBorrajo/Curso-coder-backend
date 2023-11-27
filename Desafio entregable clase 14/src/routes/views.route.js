@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   isAuthenticated,
   isNotAuthenticated,
-} from "../middlewares/authenticationMiddleware.js";
-import isAdmin from "../middlewares/checkUserRoleMiddleware.js";
+} from "../middlewares/auth.middleware.js";
+import isAdmin from "../middlewares/checkRole.middleware.js";
 
 const router = Router();
 

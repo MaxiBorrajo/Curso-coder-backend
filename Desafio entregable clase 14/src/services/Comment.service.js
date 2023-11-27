@@ -1,4 +1,4 @@
-import comment from "../models/comment.js";
+import comment from "../repositories/comment.js";
 import BaseService from "./base.service.js";
 
 class CommentService extends BaseService {
@@ -8,12 +8,15 @@ class CommentService extends BaseService {
 
   async create(object) {
     try {
-      const foundObject  =await this.model.find({idProduct: object.idProduct, idUser: object.idUser});
+      const foundObject = await this.getByFilter({
+        idProduct: object.idProduct,
+        idUser: object.idUser,
+      });
 
-      if(foundObject){
-        throw new Error('Comment already exists')
+      if (foundObject) {
+        throw new Error("Comment already exists");
       }
-      
+
       const createdObject = await this.model.create(object);
 
       return createdObject;

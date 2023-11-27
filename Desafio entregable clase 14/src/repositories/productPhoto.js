@@ -1,6 +1,6 @@
 //imports
 import mongoose from "mongoose";
-import uploadImagesMiddlware from "../middlewares/uploadImages.middleware";
+import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
 //schema
 const productPhotoSchema = new mongoose.Schema(
   {
@@ -24,14 +24,18 @@ const productPhotoSchema = new mongoose.Schema(
   }
 );
 
-productPhotoSchema.pre([/^delete/, "findOneAndDelete"], async function (next) {
-  try {
-    await uploadImagesMiddlware.deleteImageInCloud(this.publicId);
-    next();
-  } catch (error) {
-    next(error);
+productPhotoSchema.pre(
+  "findOneAndDelete",
+  async function (next) {
+    try {
+      const docToDelete = await this.model.findOne(this.getQuery());
+      await deleteImageInCloud(docToDelete.publicId);
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 const productPhoto = new mongoose.model("productPhotos", productPhotoSchema);
 

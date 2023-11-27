@@ -2,13 +2,17 @@ import express from "express";
 
 import {
   addProduct,
-  getProducts,
+  deleteProductById,
   getProductById,
+  getProducts,
   updateProductById,
-  deleteProductById
-} from "../controllers/productsController.js";
+} from "../controllers/product.controller.js";
 
-import { body_must_contain_attributes } from "../middlewares/validateBodyRequirements.js";
+import { body_must_contain_attributes } from "../middlewares/validationData.middleware.js";
+
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
+
+import isAdmin from "../middlewares/checkRole.middleware.js";
 
 const router = express.Router();
 
@@ -18,27 +22,20 @@ router.get("/:pid", getProductById);
 
 router.post(
   "/",
+  isAuthenticated,
+  isAdmin,
   body_must_contain_attributes([
     "title",
     "description",
-    "code",
     "price",
-    "status",
-    "stock",
-    "category",
+    "releaseDate",
   ]),
 
   addProduct
 );
 
-router.put(
-  "/:pid",
-  updateProductById
-);
+router.put("/:pid", isAuthenticated, isAdmin, updateProductById);
 
-router.delete(
-  "/:pid",
-  deleteProductById
-)
+router.delete("/:pid", isAuthenticated, isAdmin, deleteProductById);
 
 export default router;

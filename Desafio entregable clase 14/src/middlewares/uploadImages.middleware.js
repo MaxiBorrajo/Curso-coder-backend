@@ -16,15 +16,6 @@ async function uploadImageToCloudinary(file) {
   try {
     const uploaded_image = await cloudinary.v2.uploader.upload(file, {
       resource_type: "auto",
-      transformation: [
-        {
-          width: 300,
-          height: 300,
-          aspect_ratio: "1:1",
-          crop: "fill_pad",
-          gravity: "auto",
-        },
-      ],
     });
 
     const uploadedImageInfo = {
@@ -71,7 +62,7 @@ async function processImage(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   multerUploads,
   processImage,
   deleteImageInCloud,

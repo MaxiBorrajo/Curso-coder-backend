@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import added from "../repositories/added.js";
-import buy from "../repositories/buys.js";
 import cart from "../repositories/cart.js";
 import comment from "../repositories/comment.js";
 import message from "../repositories/message.js";
-import uploadImagesMiddleware from "../middlewares/uploadImages.middleware.js";
+import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
 import cartService from "../services/cart.service.js";
 
 const userSchema = new mongoose.Schema(
@@ -53,7 +52,7 @@ const userSchema = new mongoose.Schema(
       default:
         "https://asset.cloudinary.com/dixntuyk8/86914f2b6bc2dfd2b6a69aa670cd4853",
     },
-    publidId: {
+    publicId: {
       type: String,
       default: "x1vdmydenrkd3luzvjv6",
     },
@@ -66,13 +65,13 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("findByIdAndDelete", async function (next) {
   try {
-    const relationships = [added, buy, cart, comment, message];
+    const relationships = [added, cart, comment, message];
     for (const relation of relationships) {
       await relation.deleteMany({ idUser: this._id });
     }
 
     if (this.publidId !== "x1vdmydenrkd3luzvjv6") {
-      await uploadImagesMiddleware.deleteImageInCloud(this.publicId);
+      await deleteImageInCloud(this.publicId);
     }
 
     next();

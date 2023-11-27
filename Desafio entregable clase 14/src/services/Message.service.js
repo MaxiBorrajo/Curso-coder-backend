@@ -1,4 +1,4 @@
-import message from "../models/message.js"
+import message from "../repositories/message.js"
 import BaseService from "./base.service.js";
 
 class MessageService extends BaseService{

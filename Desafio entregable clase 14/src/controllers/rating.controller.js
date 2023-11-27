@@ -1,20 +1,9 @@
-import ratingService from "../services/Rating.service";
+import ratingService from "../services/Rating.service.js";
 
 async function rateProduct(req, res, next) {
   try {
-    const ratedProduct = await ratingService.create(req.body);
-
-    res.status(200).json({ message: ratedProduct });
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function updateRate(req, res, next) {
-  try {
-    const { rid } = req.params;
-
-    const ratedProduct = await ratingService.updateById(rid, req.body);
+    const rating = { ...req.body, ...{ idUser: req.user._id } };
+    const ratedProduct = await ratingService.create(rating);
 
     res.status(200).json({ message: ratedProduct });
   } catch (error) {
@@ -26,7 +15,7 @@ async function getRatingOfProduct(req, res, next) {
   try {
     const { pid } = req.params;
 
-    const ratedProduct = await ratingService.getPromedyOfRatingProduct(pid);
+    const ratedProduct = await ratingService.getRatingProduct(pid);
 
     res.status(200).json({ message: ratedProduct });
   } catch (error) {
@@ -34,29 +23,25 @@ async function getRatingOfProduct(req, res, next) {
   }
 }
 
-async function productsOrderByRating(req, res, next) {
+async function getRatingOfCurrentUser(req, res, next) {
   try {
-    const { page, sort } = req.query;
+    const uid = req.user._id;
+    const { pid } = req.params;
 
-    const ratedProducts = await ratingService.getProductsOrderByRating(
-      10,
-      page,
-      sort
-    );
+    const ratedProduct = await ratingService.getByFilter({
+      idUser: uid,
+      idProduct: pid,
+    });
 
-    ratedProducts.status =
-      ratedProducts.payload.length > 0 ? "success" : "error";
+    res.status(200).json({ message: ratedProduct });
+  } catch (error) {
+    next(error);
+  }
+}
 
-    delete ratedProducts.totalDocs;
-    delete ratedProducts.limit;
-    delete ratedProducts.pagingCounter;
-
-    ratedProducts.prevLink = ratedProducts.hasPrevPage
-      ? `http://localhost:8080/api/products?page=${ratedProducts.prevPage}&sort=${sort}`
-      : null;
-    ratedProducts.nextLink = ratedProducts.hasNextPage
-      ? `http://localhost:8080/api/products?page=${ratedProducts.nextPage}&sort=${sort}`
-      : null;
+async function getMostRatedProductsOfLastWeek(req, res, next) {
+  try {
+    const ratedProducts = await ratingService.getMostValueProductsRecently();
 
     res.status(200).json({ message: ratedProducts });
   } catch (error) {
@@ -64,4 +49,9 @@ async function productsOrderByRating(req, res, next) {
   }
 }
 
-export { getRatingOfProduct, updateRate, rateProduct, productsOrderByRating, };
+export {
+  getRatingOfProduct,
+  rateProduct,
+  getRatingOfCurrentUser,
+  getMostRatedProductsOfLastWeek,
+};

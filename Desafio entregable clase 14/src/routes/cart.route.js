@@ -1,34 +1,41 @@
 import express from "express";
 
 import {
-  addProductToCartById,
-  createCart,
-  getProductsOfCartById,
-  deleteCart,
+  addProductToCart,
   deleteProductFromCart,
-  updateProductOfCartById,
-  updateProductsOfCart,
-  getCartOfActiveUser
-} from "../controllers/cartController.js";
+  getCartOfActiveUser,
+  getProductsOfCartById,
+  productAlreadyAddedToCart,
+  buyCart,
+  getHistoryBuysOfCurrentUser,
+  productIsBought
+} from "../controllers/cart.controller.js";
 
-import { body_must_contain_attributes } from "../middlewares/validateBodyRequirements.js";
+import { body_must_contain_attributes } from "../middlewares/validationData.middleware.js";
+
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/", getCartOfActiveUser);
+router.post(
+  "/",
+  isAuthenticated,
+  body_must_contain_attributes(["idProduct"]),
+  addProductToCart
+);
 
-router.get("/:cid", getProductsOfCartById);
+router.get("/:cid/products", isAuthenticated, getProductsOfCartById);
 
-router.post("/", body_must_contain_attributes(["products"]), createCart);
+router.get("/:cid/product/:pid", isAuthenticated, productAlreadyAddedToCart);
 
-router.post("/:cid/products/:pid", body_must_contain_attributes(["quantity"]), addProductToCartById);
+router.delete("/:aid", isAuthenticated, deleteProductFromCart);
 
-router.delete("/:cid/products/:pid", deleteProductFromCart);
+router.get("/", isAuthenticated, getCartOfActiveUser);
 
-router.put("/:cid/products/:pid", body_must_contain_attributes(["quantity"]), updateProductOfCartById);
+router.get("/:cid/buy", isAuthenticated, buyCart);
 
-router.put("/:cid", body_must_contain_attributes(["products"]), updateProductsOfCart);
+router.get("/history", isAuthenticated, getHistoryBuysOfCurrentUser);
 
-router.delete("/:cid", deleteCart); 
+router.get("/product/:pid/buy", isAuthenticated, productIsBought);
 
 export default router;

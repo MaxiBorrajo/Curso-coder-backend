@@ -1,4 +1,4 @@
-import product from "../models/product.js";
+import product from "../repositories/product.js";
 import BaseService from "./base.service.js";
 
 class ProductService extends BaseService {
@@ -25,7 +25,7 @@ class ProductService extends BaseService {
     }
   }
 
-  async getProducts(query, limit = 10, page = 1, sort, keyword = "") {
+  async getProducts(query, limit = 10, page = 1, sort, order, keyword = "") {
     try {
       const options = {
         page: page,
@@ -34,15 +34,13 @@ class ProductService extends BaseService {
           docs: "payload",
         },
       };
-
-      if (+sort) {
-        options.sort = sort;
+      if (sort && order) {
+        options.sort = { [sort]: order };
       }
 
       let searchCriteria = {
         $or: [
-          { title: { $regex: keyword, $options: "i" } },
-          { description: { $regex: keyword, $options: "i" } },
+          { title: { $regex: keyword, $options: "i" } }
         ],
       };
 
@@ -56,7 +54,7 @@ class ProductService extends BaseService {
       const foundObjects = await this.model.paginate(searchCriteria, options);
       return foundObjects;
     } catch (error) {
-      throw new Error("Error al buscar productos");
+      throw new Error("Error al buscar productos: " + error);
     }
   }
 }

@@ -5,17 +5,21 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import productRoute from "./routes/productsRoute.js";
-import cartRoute from "./routes/cartRoute.js";
-import sessionRoute from "./routes/sessionRoute.js";
-import userRoute from "./routes/userRoute.js";
-import viewsRoute from "./routes/viewsRoute.js";
-import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
+import productRoute from "./routes/product.route.js";
+import cartRoute from "./routes/cart.route.js";
+import sessionRoute from "./routes/session.route.js";
+import userRoute from "./routes/user.route.js";
+import ratingRoute from "./routes/rating.route.js";
+import productPhotoRoute from "./routes/productPhoto.route.js";
+import viewsRoute from "./routes/views.route.js";
+import commentRoute from "./routes/comment.route.js";
+import categoryRoute from "./routes/category.route.js";
+import errorHandlerMiddleware from "./middlewares/error.middleware.js";
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import { getAllProductsHandler, messagesHandler } from "./handlers/handlers.js";
-import databaseConnection from "./config/databaseConnection.js";
+import databaseConnection from "./config/database.connection.js";
 import passport from "passport";
 
 //Variables
@@ -46,14 +50,18 @@ app.use(
     }),
   })
 );
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes
 app.use("/api/carts", cartRoute);
 app.use("/api/products", productRoute);
 app.use("/api/sessions", sessionRoute);
 app.use("/api/users", userRoute);
+app.use("/api/ratings", ratingRoute);
+app.use("/api/photos", productPhotoRoute);
+app.use("/api/comments", commentRoute);
+app.use("/api/categories", categoryRoute);
 app.use("/", viewsRoute);
 
 //Global middlewares

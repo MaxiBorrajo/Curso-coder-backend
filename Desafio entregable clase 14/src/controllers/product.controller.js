@@ -1,16 +1,16 @@
 import productService from "../services/Product.service.js";
-import ratingService from "../services/Rating.service.js";
 
 async function getProducts(req, res, next) {
   try {
-    const { query, limit, page, sort, keyboard } = req.query;
+    const { query, limit, page, sort, keyword, order } = req.query;
 
     const products = await productService.getProducts(
       query,
       limit,
       page,
       sort,
-      keyboard
+      order,
+      keyword
     );
 
     products.status = products.payload.length > 0 ? "success" : "error";
@@ -20,13 +20,38 @@ async function getProducts(req, res, next) {
     delete products.pagingCounter;
 
     products.prevLink = products.hasPrevPage
-      ? `http://localhost:8080/api/products?page=${products.prevPage}&sort=${sort}&keyboard=${keyboard}`
+      ? `http://localhost:8080/api/products?page=${products.prevPage}`
       : null;
     products.nextLink = products.hasNextPage
-      ? `http://localhost:8080/api/products?page=${products.nextPage}&sort=${sort}&keyboard=${keyboard}`
+      ? `http://localhost:8080/api/products?page=${products.nextPage}`
       : null;
 
-    res.status(200).json({ result: products });
+    products.prevLink =
+      sort && order && products.prevLink
+        ? products.prevLink + `&sort=${sort}&order=${order}`
+        : products.prevLink;
+    products.nextLink =
+      sort && order && products.nextLink
+        ? products.nextLink + `&sort=${sort}&order=${order}`
+        : products.nextLink;
+    products.prevLink =
+      keyword && products.prevLink
+        ? products.prevLink + `&keyboard=${keyword}`
+        : products.prevLink;
+    products.nextLink =
+      keyword && products.nextLink
+        ? products.nextLink + `&keyboard=${keyword}`
+        : products.nextLink;
+    products.prevLink =
+      limit && products.prevLink
+        ? products.prevLink + `&limit=${limit}`
+        : products.prevLink;
+    products.nextLink =
+      limit && products.nextLink
+        ? products.nextLink + `&limit=${limit}`
+        : products.nextLink;
+
+    res.status(200).json({ message: products });
   } catch (error) {
     next(error);
   }
@@ -39,9 +64,9 @@ async function getProductById(req, res, next) {
     const product = await productService.getById(pid);
 
     if (product) {
-      res.status(200).json({ product: product });
+      res.status(200).json({ message: product });
     } else {
-      res.status(400).json({ product: "Not found" });
+      res.status(400).json({ message: "Not found" });
     }
   } catch (error) {
     next(error);
@@ -82,21 +107,10 @@ async function deleteProductById(req, res, next) {
   }
 }
 
-async function getMostValueProductsOnLastWeek(req, res, next) {
-  try {
-    const products = await ratingService.getMostValueProductsRecently();
-
-    res.status(200).json({ message: products });
-  } catch (error) {
-    next(error);
-  }
-}
-
 export {
   addProduct,
   getProducts,
   getProductById,
   updateProductById,
   deleteProductById,
-  getMostValueProductsOnLastWeek
 };

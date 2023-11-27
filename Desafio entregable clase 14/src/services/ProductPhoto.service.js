@@ -1,4 +1,4 @@
-import productPhoto from "../models/productPhoto.js";
+import productPhoto from "../repositories/productPhoto.js";
 import BaseService from "./base.service.js";
 
 class ProductPhotoService extends BaseService {

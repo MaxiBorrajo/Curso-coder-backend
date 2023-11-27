@@ -1,10 +1,10 @@
 //imports
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import added from "./added";
-import categorized from "./categorized";
-import productPhoto from "./productPhoto";
-import rating from "./rating";
+import added from "./added.js";
+import categorized from "./categorized.js";
+import productPhoto from "./productPhoto.js";
+import rating from "./rating.js";
 
 //schema
 const productSchema = new mongoose.Schema(

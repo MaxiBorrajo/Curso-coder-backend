@@ -5,20 +5,20 @@ import passport from "passport";
 import {
   body_must_contain_attributes,
   meetsWithEmailRequirements,
-  meetsWithPasswordRequirements,
-} from "../middlewares/validateBodyRequirements.js";
+  meetsWithPasswordRequirements
+} from "../middlewares/validationData.middleware.js";
 
 import {
-  logout,
-  register,
   getActualUser,
-} from "../controllers/sessionController.js";
+  login,
+  logout,
+  register
+} from "../controllers/session.controller.js";
 
-import "../middlewares/jwt.strategy.js";
 import "../middlewares/github.strategy.js";
 import "../middlewares/google.strategy.js";
 
-import { isAuthenticated } from "../middlewares/authenticationMiddleware.js";
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -56,12 +56,7 @@ router.post(
   "/login",
   meetsWithEmailRequirements,
   body_must_contain_attributes(["password"]),
-  passport.authenticate("local", {
-    failureRedirect: "http://localhost:8080/login",
-  }),
-  (req, res, next) => {
-    res.status(200).send({ message: req.user });
-  }
+  login
 );
 
 router.post(
@@ -78,7 +73,7 @@ router.post(
   register
 );
 
-router.delete("/", logout);
+router.delete("/", isAuthenticated, logout);
 
 router.get("/current", isAuthenticated, getActualUser);
 

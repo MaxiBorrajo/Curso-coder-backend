@@ -1,5 +1,6 @@
 //imports
 import mongoose from "mongoose";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 //schema
 const ratingSchema = new mongoose.Schema(
@@ -25,6 +26,8 @@ const ratingSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+ratingSchema.plugin(aggregatePaginate);
 
 const rating = new mongoose.model("ratings", ratingSchema);
 

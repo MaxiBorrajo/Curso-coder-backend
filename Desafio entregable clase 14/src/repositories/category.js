@@ -1,6 +1,6 @@
 //imports
 import mongoose from "mongoose";
-import categorized from "./categorized";
+import categorized from "./categorized.js";
 //schema
 const categorySchema = new mongoose.Schema(
   {

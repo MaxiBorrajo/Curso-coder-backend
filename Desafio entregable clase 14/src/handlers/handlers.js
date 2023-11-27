@@ -1,5 +1,5 @@
-import productService from "../services/Product.service";
-import messageService from "../services/Message.service";
+import productService from "../services/Product.service.js";
+import messageService from "../services/Message.service.js";
 
 async function getAllProductsHandler(io, socket) {
   socket.on("getAllProducts", async () => {

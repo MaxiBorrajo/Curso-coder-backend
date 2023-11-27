@@ -1,5 +1,6 @@
 //imports
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 //schema
 const addedSchema = new mongoose.Schema(
@@ -25,6 +26,8 @@ const addedSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+addedSchema.plugin(mongoosePaginate);
 
 const added = new mongoose.model("added", addedSchema);
 

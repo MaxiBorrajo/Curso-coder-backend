@@ -1,6 +1,6 @@
-import commentService from "../services/Comment.service";
+import commentService from "../services/Comment.service.js";
 
-async function deleteComment(res, res, next) {
+async function deleteComment(req, res, next) {
   try {
     const { cid } = req.params;
 
@@ -12,9 +12,14 @@ async function deleteComment(res, res, next) {
   }
 }
 
-async function postComment(res, res, next) {
+async function postComment(req, res, next) {
   try {
-    const postedComment = await commentService.create(req.body);
+    const comment = {
+      ...req.body,
+      idUser: req.user._id,
+    };
+    
+    const postedComment = await commentService.create(comment);
 
     res.status(200).json({ message: postedComment });
   } catch (error) {
@@ -22,7 +27,7 @@ async function postComment(res, res, next) {
   }
 }
 
-async function updateComment(res, res, next) {
+async function updateComment(req, res, next) {
   try {
     const { cid } = req.params;
 
@@ -55,10 +60,7 @@ async function getCommentsOfProduct(req, res, next) {
     const { pid } = req.params;
     const { limit } = req.query;
 
-    const comments = await commentService.getCommentsOfProduct(
-      pid,
-      limit
-    );
+    const comments = await commentService.getCommentsOfProduct(pid, limit);
 
     res.status(200).json({ message: comments });
   } catch (error) {

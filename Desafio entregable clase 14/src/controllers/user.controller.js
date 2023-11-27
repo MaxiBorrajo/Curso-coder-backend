@@ -1,4 +1,4 @@
-import userService from "../services/User.service";
+import userService from "../services/User.service.js";
 
 async function deleteCurrentUser(req, res, next) {
   try {
@@ -22,17 +22,19 @@ async function updateCurrentUser(req, res, next) {
   try {
     const uid = req.user._id;
 
+    
+
     if (req.file) {
-      req.user = {
-        ...req.user,
+      req.body = {
+        ...req.body,
         ...{
           urlProfilePhoto: req.file.url,
-          publidId: req.file.publidId,
+          publicId: req.file.publicId,
         },
       };
     }
     
-    const updatedUser = userManager.updateById(uid, req.body);
+    const updatedUser = await userService.updateById(uid, req.body);
 
     res.status(200).send({ message: updatedUser });
   } catch (error) {

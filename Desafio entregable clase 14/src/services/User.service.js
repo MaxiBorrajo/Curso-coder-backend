@@ -1,10 +1,25 @@
 import user from "../repositories/user.js";
 import BaseService from "./base.service.js";
 import jwt from "jsonwebtoken";
+import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
 
 class UserService extends BaseService {
   constructor() {
     super(user);
+  }
+
+  async updateById(id, object) {
+    try {
+      if (object.publicId) {
+        const foundUser = await this.getById(id);
+
+        await deleteImageInCloud(foundUser.publicId);
+      }
+
+      return super.updateById(id, object);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create(object) {
@@ -32,7 +47,7 @@ class UserService extends BaseService {
   }
 
   async generateToken(data) {
-    const token = jwt.sign(data, process.env.JWT_SECRET);
+    const token = await jwt.sign(data, process.env.JWT_SECRET);
 
     return token;
   }
@@ -46,7 +61,7 @@ class UserService extends BaseService {
       }
 
       const response = {
-        token: this.generateToken(foundUser),
+        token: await this.generateToken(foundUser.toJSON()),
         user: foundUser,
       };
 

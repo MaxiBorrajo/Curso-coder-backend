@@ -1,9 +1,11 @@
-import categorizedService from "../services/Categorized.service";
-import categoryService from "../services/Category.service";
+import categorizedService from "../services/Categorized.service.js";
+import categoryService from "../services/Category.service.js";
 
 async function getCategories(req, res, next) {
   try {
-    const categories = await categoryService.getAll();
+    const { keyword } = req.query;
+    
+    const categories = await categoryService.getAll({}, keyword);
 
     res.status(200).json({ message: categories });
   } catch (error) {
@@ -57,15 +59,23 @@ async function deleteCategory(req, res, next) {
 
 async function getProductsByCategory(req, res, next) {
   try {
-    const { page, sort } = req.query;
+    const { page } = req.query;
     const { ctid } = req.params;
 
-    const products = await categoryService.getProductsByCategory(
-      ctid,
-      10,
-      page,
-      sort
-    );
+    const products = await categoryService.getProductsByCategory(ctid, page);
+
+    products.status = products.payload.length > 0 ? "success" : "error";
+
+    delete products.totalDocs;
+    delete products.limit;
+    delete products.pagingCounter;
+
+    products.prevLink = products.hasPrevPage
+      ? `http://localhost:8080/api/categories/${ctid}/products?page=${products.prevPage}`
+      : null;
+    products.nextLink = products.hasNextPage
+      ? `http://localhost:8080/api/categories/${ctid}/products?page=${products.nextPage}`
+      : null;
 
     res.status(200).json({ message: products });
   } catch (error) {

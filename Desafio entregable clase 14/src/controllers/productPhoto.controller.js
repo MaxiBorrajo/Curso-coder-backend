@@ -1,8 +1,12 @@
-import photoProductService from "../services/ProductPhoto.service";
+import photoProductService from "../services/ProductPhoto.service.js";
 
 async function addPhotoToProduct(req, res, next) {
   try {
-    const photoProduct = { ...req.body, ...req.file };
+    const file = {
+      publicId: req.file.publicId,
+      urlProductPhoto: req.file.url,
+    };
+    const photoProduct = { ...req.body, ...file };
 
     const photoProductCreated = await photoProductService.create(photoProduct);
 
@@ -16,7 +20,7 @@ async function getPhotosOfProduct(req, res, next) {
   try {
     const { pid } = req.params;
 
-    const photoProducts = await photoProductService.getByFilter({
+    const photoProducts = await photoProductService.getAll({
       idProduct: pid,
     });
 

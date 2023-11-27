@@ -1,4 +1,4 @@
-import categorized from "../models/categorized.js";
+import categorized from "../repositories/categorized.js";
 import BaseService from "./base.service.js";
 
 class CategorizedService extends BaseService {

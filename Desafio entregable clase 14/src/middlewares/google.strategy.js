@@ -4,7 +4,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 
 import userService from "../services/User.service.js";
 
-import uploadImageMiddleware from "./uploadImages.middleware";
+import { uploadImageToCloudinary } from "./uploadImages.middleware.js";
 
 passport.use(
   new GoogleStrategy(
@@ -34,15 +34,15 @@ passport.use(
 
         if (!foundUser) {
           const profilePhoto =
-            await uploadImageMiddleware.uploadImageToCloudinary(
+            await uploadImageToCloudinary(
               profile.picture
             );
 
           const newUser = {
             email: profile.email,
-            name: profile.displayName,
+            first_name: profile.displayName,
             urlProfilePhoto: profilePhoto.url,
-            publicId: profilePhoto.publicId,
+            publicId: profilePhoto.public_id,
             oauthUser: true,
           };
 

@@ -1,11 +1,11 @@
-import userService from "../services/User.service";
+import userService from "../services/User.service.js";
 
 async function register(req, res, next) {
   try {
     const result = await userService.create(req.body);
 
     const response = {
-      token: userService.generateToken(result),
+      token: await userService.generateToken(result.toJSON()),
       user: result
     }
 

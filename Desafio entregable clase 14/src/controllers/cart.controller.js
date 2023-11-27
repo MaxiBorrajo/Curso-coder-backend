@@ -1,9 +1,16 @@
-import cartService from "../services/Cart.service";
-import addedService from "../services/Added.service";
+import cartService from "../services/Cart.service.js";
+import addedService from "../services/Added.service.js";
 
 async function addProductToCart(req, res, next) {
   try {
-    const result = await addedService.create(req.body);
+    const data = {
+      ...req.body,
+      ...{
+        idUser: req.user._id,
+      },
+    };
+
+    const result = await addedService.create(data);
 
     res.status(200).json({ message: result });
   } catch (error) {
@@ -25,10 +32,10 @@ async function getProductsOfCartById(req, res, next) {
     delete products.pagingCounter;
 
     products.prevLink = products.hasPrevPage
-      ? `http://localhost:8080/api/carts/products?page=${products.prevPage}`
+      ? `http://localhost:8080/api/carts/${cid}/products?page=${products.prevPage}`
       : null;
     products.nextLink = products.hasNextPage
-      ? `http://localhost:8080/api/carts/products?page=${products.nextPage}`
+      ? `http://localhost:8080/api/carts/${cid}/products?page=${products.nextPage}`
       : null;
 
     res.status(200).json({ products: products });
@@ -53,9 +60,77 @@ async function getCartOfActiveUser(req, res, next) {
   try {
     const uid = req.user._id;
 
-    const result = await cartService.getByFilter({ idUser: uid });
+    const result = await cartService.getByFilter({
+      idUser: uid,
+      bought: false,
+    });
 
     res.status(200).json({ message: result });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function productAlreadyAddedToCart(req, res, next) {
+  try {
+    const uid = req.user._id;
+    const { cid, pid } = req.params;
+
+    const result = await addedService.productAlreadyAdded(cid, pid, uid);
+
+    res.status(200).json({ message: result });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function buyCart(req, res, next) {
+  try {
+    const uid = req.user._id;
+    const { cid } = req.params;
+
+    const purchase = await cartService.buyCartById(cid, uid);
+
+    res.status(200).json({ message: purchase });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getHistoryBuysOfCurrentUser(req, res, next) {
+  try {
+    const uid = req.user._id;
+    const { page } = req.query;
+
+    const history = await cartService.getHistoryOfBuys(uid, 10, page);
+
+    history.status = history.payload.length > 0 ? "success" : "error";
+
+    delete history.totalDocs;
+    delete history.limit;
+    delete history.pagingCounter;
+
+    history.prevLink = history.hasPrevPage
+      ? `http://localhost:8080/api/cart/history?page=${products.prevPage}`
+      : null;
+    history.nextLink = history.hasNextPage
+      ? `http://localhost:8080/api/cart/history?page=${products.nextPage}`
+      : null;
+
+    res.status(200).json({ message: history });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function productIsBought(req, res, next) {
+  try {
+    const uid = req.user._id;
+    const { pid } = req.params;
+
+    const productBought = await cartService.productAlreadyBuy(uid, pid);
+
+    res.status(200).json({ message: productBought });
   } catch (error) {
     next(error);
   }
@@ -66,4 +141,8 @@ export {
   deleteProductFromCart,
   getCartOfActiveUser,
   getProductsOfCartById,
+  productAlreadyAddedToCart,
+  buyCart,
+  getHistoryBuysOfCurrentUser,
+  productIsBought,
 };

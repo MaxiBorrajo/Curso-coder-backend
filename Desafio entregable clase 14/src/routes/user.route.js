@@ -1,16 +1,27 @@
 import express from "express";
 
 import {
-  deleteUser,
+  deleteCurrentUser,
   updateCurrentUser
-} from "../controllers/userController.js";
+} from "../controllers/user.controller.js";
 
-import { isAuthenticated } from "../middlewares/authenticationMiddleware.js";
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
+
+import {
+  multerUploads,
+  processImage,
+} from "../middlewares/uploadImages.middleware.js";
 
 const router = express.Router();
 
-router.delete("/", deleteUser);
+router.delete("/", isAuthenticated, deleteCurrentUser);
 
-router.put("/", isAuthenticated, updateCurrentUser);
+router.put(
+  "/",
+  isAuthenticated,
+  multerUploads,
+  processImage,
+  updateCurrentUser
+);
 
 export default router;
