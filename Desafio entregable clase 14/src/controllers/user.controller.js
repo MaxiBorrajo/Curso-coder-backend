@@ -22,8 +22,6 @@ async function updateCurrentUser(req, res, next) {
   try {
     const uid = req.user._id;
 
-    
-
     if (req.file) {
       req.body = {
         ...req.body,

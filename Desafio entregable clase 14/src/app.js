@@ -80,3 +80,6 @@ const onConnection = async (socket) => {
 };
 
 socketServer.on("connection", onConnection);
+
+
+export default app;

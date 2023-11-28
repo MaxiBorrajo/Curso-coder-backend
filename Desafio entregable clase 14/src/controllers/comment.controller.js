@@ -42,6 +42,7 @@ async function updateComment(req, res, next) {
 async function getCommentOfCurrentUser(req, res, next) {
   try {
     const uid = req.user._id;
+    
     const { pid } = req.params;
 
     const comments = await commentService.getByFilter({

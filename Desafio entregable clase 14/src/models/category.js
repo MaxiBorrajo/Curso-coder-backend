@@ -16,14 +16,17 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-categorySchema.pre("findOneAndDelete", async function (next) {
-  try {
-    await categorized.deleteMany({ idCategory: this._id });
-    next();
-  } catch (error) {
-    next(error);
+categorySchema.pre(
+  ["findOneAndDelete", "deleteOne", "deleteMany", "findIdAndDelete"],
+  async function (next) {
+    try {
+      await categorized.deleteMany({ idCategory: this._id });
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 const category = new mongoose.model("categories", categorySchema);
 

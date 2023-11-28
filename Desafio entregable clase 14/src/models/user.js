@@ -4,6 +4,7 @@ import added from "./added.js";
 import cart from "./cart.js";
 import comment from "./comment.js";
 import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
+import CartService from "../services/Cart.service.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -91,10 +92,10 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.post("save", async function () {
-  const foundCart = await cartService.getByFilter({ idUser: this._id });
+  const foundCart = await CartService.getByFilter({ idUser: this._id });
 
   if (!foundCart) {
-    await cartService.create({ idUser: this._id });
+    await CartService.create({ idUser: this._id });
   }
 });
 

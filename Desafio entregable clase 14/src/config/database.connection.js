@@ -1,14 +1,12 @@
-//imports
 import mongoose from "mongoose";
 
-//config
 mongoose.set("strictQuery", true);
 
-//methods
-/**
- * Establish connection with database with uri as enviroment variable DATABASE_URI
- * @throws {Error} - If cannot connects with database throws an error.
- */
+const DB_URI =
+  process.env.NODE_ENV === "test"
+    ? process.env.DB_URI_TEST
+    : process.env.DB_URI;
+
 async function databaseConnection() {
   await mongoose
     .connect(process.env.DB_URI)

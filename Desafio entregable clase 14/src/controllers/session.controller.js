@@ -1,11 +1,12 @@
 import userService from "../services/User.service.js";
+import { generateToken } from "../utils.js";
 
 async function register(req, res, next) {
   try {
     const result = await userService.create(req.body);
 
     const response = {
-      token: await userService.generateToken(result.toJSON()),
+      token: await generateToken(result.toJSON()),
       user: result
     }
 

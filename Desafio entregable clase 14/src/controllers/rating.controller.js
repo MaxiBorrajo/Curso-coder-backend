@@ -27,6 +27,7 @@ async function getRatingOfProduct(req, res, next) {
 async function getRatingOfCurrentUser(req, res, next) {
   try {
     const uid = req.user._id;
+    
     const { pid } = req.params;
 
     const ratedProduct = await ratingService.getByFilter({

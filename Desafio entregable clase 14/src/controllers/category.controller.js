@@ -26,6 +26,7 @@ async function addProductToCategory(req, res, next) {
 async function deleteProductFromCategory(req, res, next) {
   try {
     const { ctid, pid } = req.params;
+    
     const deletedProductFromCategory =
       await categorizedService.deleteProductFromCategory(pid, ctid);
 

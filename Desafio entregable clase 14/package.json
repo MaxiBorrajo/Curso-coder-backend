@@ -5,8 +5,12 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "cross-env NODE_ENV=production node src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/app.js",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npx jest"
+  },
+  "jest": {
+    "transform": {}
   },
   "keywords": [],
   "author": "",
@@ -33,5 +37,8 @@
     "passport-github2": "^0.1.12",
     "passport-google-oauth2": "^0.2.0",
     "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
