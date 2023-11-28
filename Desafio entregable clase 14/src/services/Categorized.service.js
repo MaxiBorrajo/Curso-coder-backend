@@ -1,39 +1,36 @@
-import categorized from "../repositories/categorized.js";
+import CategorizedDao from "../dao/DBSystem/Categorized.dao.js";
 import BaseService from "./base.service.js";
 
 class CategorizedService extends BaseService {
   constructor() {
-    super(categorized);
+    super(CategorizedDao);
   }
 
-  async create(data) {
+  async getProductsByCategory(idCategory, page) {
     try {
-      const foundProductInCategory = await this.getByFilter(data);
+      const foundObjects = await this.dao.getProductsByCategory(
+        idCategory,
+        page
+      );
 
-      if (foundProductInCategory) {
-        throw new Error("Product already in category");
-      }
+      foundObjects.status =
+        foundObjects.payload.length > 0 ? "success" : "error";
 
-      const addedProductToCategory = await super.create(data);
+      delete foundObjects.totalDocs;
+      delete foundObjects.limit;
+      delete foundObjects.pagingCounter;
 
-      return addedProductToCategory;
+      foundObjects.prevLink = foundObjects.hasPrevPage
+        ? `http://localhost:8080/api/categories/${ctid}/products?page=${foundObjects.prevPage}`
+        : null;
+      foundObjects.nextLink = foundObjects.hasNextPage
+        ? `http://localhost:8080/api/categories/${ctid}/products?page=${foundObjects.nextPage}`
+        : null;
+
+      return foundObjects;
     } catch (error) {
-      console.error("Error en addProductToCategory:", error);
-      throw new Error("Error al añadir product a categoria");
-    }
-  }
-
-  async deleteProductFromCategory(productId, categoryId) {
-    try {
-      const deletedProduct = await this.model.deleteOne({
-        idProduct: productId,
-        idCategory: categoryId,
-      });
-
-      return deletedProduct;
-    } catch (error) {
-      console.error("Error en deleteProductFromCategory:", error);
-      throw new Error("Error al eliminar producto de categoria");
+      console.error("Error en getProductsByCategory:", error);
+      throw new Error("Error al obtener los productos por categoria");
     }
   }
 }

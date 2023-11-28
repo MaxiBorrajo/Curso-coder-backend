@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import added from "../repositories/added.js";
-import cart from "../repositories/cart.js";
-import comment from "../repositories/comment.js";
-import message from "../repositories/message.js";
+import added from "./added.js";
+import cart from "./cart.js";
+import comment from "./comment.js";
 import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
-import cartService from "../services/cart.service.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -63,15 +61,18 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre("findByIdAndDelete", async function (next) {
+userSchema.pre(["findByIdAndDelete", "findOneAndDelete", "deleteOne", "deleteMany"], async function (next) {
   try {
-    const relationships = [added, cart, comment, message];
+    const docToDelete = await this.model.findOne(this.getQuery());
+
+    const relationships = [added, cart, comment];
+
     for (const relation of relationships) {
-      await relation.deleteMany({ idUser: this._id });
+      await relation.deleteMany({ idUser: docToDelete._id });
     }
 
-    if (this.publidId !== "x1vdmydenrkd3luzvjv6") {
-      await deleteImageInCloud(this.publicId);
+    if (docToDelete.publicId !== "x1vdmydenrkd3luzvjv6") {
+      await deleteImageInCloud(docToDelete.publicId);
     }
 
     next();

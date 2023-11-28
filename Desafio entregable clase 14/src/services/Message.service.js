@@ -1,9 +1,9 @@
-import message from "../repositories/message.js"
+import MessageDao from "../dao/DBSystem/Message.dao.js"
 import BaseService from "./base.service.js";
 
 class MessageService extends BaseService{
     constructor(){
-        super(message)
+        super(MessageDao)
     }
 }
 

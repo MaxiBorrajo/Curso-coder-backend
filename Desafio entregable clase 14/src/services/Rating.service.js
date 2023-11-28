@@ -1,30 +1,10 @@
 import BaseService from "./base.service.js";
-import rating from "../repositories/rating.js";
+import RatingDao from "../dao/DBSystem/Rating.dao.js";
 import mongoose from "mongoose";
 
 class RatingService extends BaseService {
   constructor() {
-    super(rating);
-  }
-
-  async create(object) {
-    try {
-      let rating = await this.getByFilter({
-        idUser: object.idUser,
-        idProduct: object.idProduct,
-      });
-
-      if (rating) {
-        rating = await this.updateById(rating._id, object);
-      } else {
-        rating = await this.model.create(object);
-      }
-
-      return rating;
-    } catch (error) {
-      console.error("Error en create:", error);
-      throw new Error("Error al valorar producto");
-    }
+    super(RatingDao);
   }
 
   async getMostValueProductsRecently() {
@@ -33,7 +13,7 @@ class RatingService extends BaseService {
       const lastWeek = 1000 * 60 * 60 * 24 * 7;
       const startDate = new Date(now - lastWeek);
 
-      const aggregateQuery = await this.model.aggregate([
+      const aggregateQuery = await this.dao.aggregate([
         {
           $match: {
             createdAt: {
@@ -75,7 +55,7 @@ class RatingService extends BaseService {
 
   async getRatingProduct(productId) {
     try {
-      const ratingPromedy = await this.model.aggregate([
+      const ratingPromedy = await this.dao.aggregate([
         { $match: { idProduct: new mongoose.Types.ObjectId(productId) } },
         {
           $group: {
@@ -85,7 +65,7 @@ class RatingService extends BaseService {
         },
       ]);
 
-      const ratingCount = await this.model.aggregate([
+      const ratingCount = await this.aggregate([
         {
           $match: {
             idProduct: new mongoose.Types.ObjectId(productId),

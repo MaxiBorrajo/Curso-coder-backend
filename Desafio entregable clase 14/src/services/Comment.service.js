@@ -1,36 +1,17 @@
-import comment from "../repositories/comment.js";
+import CommentDao from "../dao/DBSystem/Comment.dao.js";
 import BaseService from "./base.service.js";
 
 class CommentService extends BaseService {
   constructor() {
-    super(comment);
+    super(CommentDao);
   }
 
-  async create(object) {
+  async getCommentsOfProduct(idProduct, limit) {
     try {
-      const foundObject = await this.getByFilter({
-        idProduct: object.idProduct,
-        idUser: object.idUser,
-      });
-
-      if (foundObject) {
-        throw new Error("Comment already exists");
-      }
-
-      const createdObject = await this.model.create(object);
-
-      return createdObject;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getCommentsOfProduct(idProduct, limit = 10) {
-    try {
-      const foundObjects = await this.model
-        .find({ idProduct: idProduct })
-        .limit(limit)
-        .sort({ createdAt: -1 });
+      const foundObjects = await this.dao.getCommentsOfProduct(
+        idProduct,
+        limit
+      );
 
       return foundObjects;
     } catch (error) {

@@ -1,73 +1,113 @@
 import BaseService from "./base.service.js";
-import added from "../repositories/added.js";
-import cart from "../repositories/cart.js";
-import cartService from "./Cart.service.js";
+import AddedDao from "../dao/DBSystem/Added.dao.js";
 
 class AddedService extends BaseService {
   constructor() {
-    super(added);
+    super(AddedDao);
   }
 
-  async create(object) {
+  async getProductsOfCart(idCart, limit, page) {
     try {
-      const foundProduct = await this.model.findOne(object).populate({path:"idCart"});
-
-      if (foundProduct) {
-        const error = foundProduct.idCart.bought ? "Product already bought" : "Product already added to cart"
-        throw new Error(error);
-      }
-
-      const foundCart = await cart.findOne({
-        idUser: object.idUser,
-        bought: false,
-      });
-
-      object = { ...object, ...{ idCart: foundCart._id } };
-
-      return super.create(object);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getProductsOfCart(idCart, limit = 10, page = 1) {
-    try {
-      const options = {
-        page: page,
-        limit: limit,
-        populate: "idProduct",
-        customLabels: {
-          docs: "payload",
-        },
-        sort: { createdAt: -1 },
-      };
-
-      const foundObjects = await this.model.paginate(
-        { idCart: idCart },
-        options
+      const foundObjects = await this.dao.getProductsOfCart(
+        idCart,
+        limit,
+        page
       );
+
+      foundObjects.status =
+        foundObjects.payload.length > 0 ? "success" : "error";
+
+      delete foundObjects.totalDocs;
+      delete foundObjects.limit;
+      delete foundObjects.pagingCounter;
+
+      foundObjects.prevLink = foundObjects.hasPrevPage
+        ? `http://localhost:8080/api/carts/${cid}/products?page=${foundObjects.prevPage}`
+        : null;
+      foundObjects.nextLink = foundObjects.hasNextPage
+        ? `http://localhost:8080/api/carts/${cid}/products?page=${foundObjects.nextPage}`
+        : null;
 
       return foundObjects;
     } catch (error) {
-      console.error("Error en getProductsOfCart:", error);
-      throw new Error("Error al obtener los productos del carrito");
+      throw new Error(error);
     }
   }
 
   async productAlreadyAdded(cartId, productId, userId) {
     try {
-      const foundProduct = await this.model.exists({
-        idUser: userId,
-        idProduct: productId,
-        idCart: cartId,
-      });
+      const foundProduct = await this.dao.productAlreadyAdded(
+        cartId,
+        productId,
+        userId
+      );
 
       return foundProduct;
     } catch (error) {
-      console.error("Error en productAlreadyAdded:", error);
-      throw new Error(
-        "Error al obtener si el producto ya fue añadido al carrito"
-      );
+      throw new Error(error);
+    }
+  }
+
+  async getHistoryOfBuys(userId, limit = 10) {
+    try {
+      let aggregateQuery = await this.aggregate([
+        {
+          $match: { idUser: userId },
+        },
+        {
+          $sort: { createdAt: -1 },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "idProduct",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        {
+          $group: {
+            _id: "$idCart",
+            totalPrice: { $sum: { $sum: "$product.price" } },
+            products: { $push: "$product" },
+          },
+        },
+        {
+          $lookup: {
+            from: "carts",
+            localField: "_id",
+            foreignField: "_id",
+            as: "_id",
+          },
+        },
+        {
+          $limit: +limit,
+        },
+      ]);
+
+      aggregateQuery = aggregateQuery.filter((buy) => {
+        return buy._id[0].bought;
+      });
+
+      return aggregateQuery;
+    } catch (error) {
+      console.error("Error en getHistoryOfBuys:", error);
+      throw new Error("Error al obtener el historial de compras");
+    }
+  }
+
+  async getProductsOwnedByUser(userId, limit) {
+    try {
+      const history = await this.getHistoryOfBuys(userId, limit);
+
+      let products = history.map((boughts) => boughts.products);
+
+      products = products.flat(Infinity);
+
+      return products;
+    } catch (error) {
+      console.error("Error en getHistoryOfBuys:", error);
+      throw new Error("Error al obtener el historial de compras");
     }
   }
 }

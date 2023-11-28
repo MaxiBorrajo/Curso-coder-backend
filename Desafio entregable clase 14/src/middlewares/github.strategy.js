@@ -32,9 +32,9 @@ passport.use(
           const result = await userService.create(newUser);
 
           return done(null, result);
-        } else {
-          return done(null, foundUser);
         }
+
+        return done(null, foundUser);
       } catch (error) {
         return done(error);
       }

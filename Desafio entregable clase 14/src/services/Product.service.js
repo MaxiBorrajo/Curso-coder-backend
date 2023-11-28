@@ -1,9 +1,9 @@
-import product from "../repositories/product.js";
+import ProductDao from "../dao/DBSystem/Product.dao.js";
 import BaseService from "./base.service.js";
 
 class ProductService extends BaseService {
   constructor() {
-    super(product);
+    super(ProductDao);
   }
 
   async getRecentProducts() {
@@ -12,12 +12,15 @@ class ProductService extends BaseService {
       const week = 1000 * 60 * 60 * 24 * 7;
       const lastWeek = new Date(now - week);
 
-      const products = await this.model
-        .find({
+      const products = await this.dao.getProducts(
+        {
           createdAt: { $gte: lastWeek, $lte: now },
-        })
-        .limit(5)
-        .sort({ createdAt: -1 });
+        },
+        5,
+        1,
+        "createdAt",
+        -1
+      );
 
       return products;
     } catch (error) {
@@ -27,32 +30,54 @@ class ProductService extends BaseService {
 
   async getProducts(query, limit = 10, page = 1, sort, order, keyword = "") {
     try {
-      const options = {
-        page: page,
-        limit: limit,
-        customLabels: {
-          docs: "payload",
-        },
-      };
-      if (sort && order) {
-        options.sort = { [sort]: order };
-      }
+      const products = await this.dao.getProducts(
+        query,
+        limit,
+        page,
+        sort,
+        order,
+        keyword
+      );
 
-      let searchCriteria = {
-        $or: [
-          { title: { $regex: keyword, $options: "i" } }
-        ],
-      };
+      products.status = products.payload.length > 0 ? "success" : "error";
 
-      if (query) {
-        const additionalQuery = JSON.parse(query);
-        searchCriteria = {
-          $and: [searchCriteria, additionalQuery],
-        };
-      }
+      delete products.totalDocs;
+      delete products.limit;
+      delete products.pagingCounter;
 
-      const foundObjects = await this.model.paginate(searchCriteria, options);
-      return foundObjects;
+      products.prevLink = products.hasPrevPage
+        ? `http://localhost:8080/api/products?page=${products.prevPage}`
+        : null;
+      products.nextLink = products.hasNextPage
+        ? `http://localhost:8080/api/products?page=${products.nextPage}`
+        : null;
+
+      products.prevLink =
+        sort && order && products.prevLink
+          ? products.prevLink + `&sort=${sort}&order=${order}`
+          : products.prevLink;
+      products.nextLink =
+        sort && order && products.nextLink
+          ? products.nextLink + `&sort=${sort}&order=${order}`
+          : products.nextLink;
+      products.prevLink =
+        keyword && products.prevLink
+          ? products.prevLink + `&keyboard=${keyword}`
+          : products.prevLink;
+      products.nextLink =
+        keyword && products.nextLink
+          ? products.nextLink + `&keyboard=${keyword}`
+          : products.nextLink;
+      products.prevLink =
+        limit && products.prevLink
+          ? products.prevLink + `&limit=${limit}`
+          : products.prevLink;
+      products.nextLink =
+        limit && products.nextLink
+          ? products.nextLink + `&limit=${limit}`
+          : products.nextLink;
+
+      return products;
     } catch (error) {
       throw new Error("Error al buscar productos: " + error);
     }

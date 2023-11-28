@@ -3,6 +3,7 @@ import ratingService from "../services/Rating.service.js";
 async function rateProduct(req, res, next) {
   try {
     const rating = { ...req.body, ...{ idUser: req.user._id } };
+    
     const ratedProduct = await ratingService.create(rating);
 
     res.status(200).json({ message: ratedProduct });

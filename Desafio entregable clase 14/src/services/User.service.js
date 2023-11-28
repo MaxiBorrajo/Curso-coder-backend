@@ -1,55 +1,10 @@
-import user from "../repositories/user.js";
+import UserDao from "../dao/DBSystem/User.dao.js";
 import BaseService from "./base.service.js";
-import jwt from "jsonwebtoken";
-import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
+import { generateToken } from "../utils.js";
 
 class UserService extends BaseService {
   constructor() {
-    super(user);
-  }
-
-  async updateById(id, object) {
-    try {
-      if (object.publicId) {
-        const foundUser = await this.getById(id);
-
-        await deleteImageInCloud(foundUser.publicId);
-      }
-
-      return super.updateById(id, object);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async create(object) {
-    try {
-      const foundUser = await this.getByFilter({ email: object.email });
-
-      if (foundUser) {
-        throw new Error("User already exists");
-      }
-
-      return super.create(object);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async deleteById(id) {
-    try {
-      const deletedObject = await this.model.findByIdAndDelete(id);
-
-      return deletedObject;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async generateToken(data) {
-    const token = await jwt.sign(data, process.env.JWT_SECRET);
-
-    return token;
+    super(UserDao);
   }
 
   async login(object) {
@@ -61,7 +16,7 @@ class UserService extends BaseService {
       }
 
       const response = {
-        token: await this.generateToken(foundUser.toJSON()),
+        token: await generateToken(foundUser.toJSON()),
         user: foundUser,
       };
 

@@ -14,18 +14,6 @@ passport.use(
       callbackURL: "http://localhost:8080/api/sessions/google/callback",
       passReqToCallback: true,
     },
-    /**
-     * Passport google authentication strategy callback. Searches with the information given
-     * by the authentication a user stored in database, if it is found, executes done function, if it is not
-     * creates one and then executes done.
-     * @param {Object} request - Request's object from the http request
-     * @param {string} accessToken - Access token from google authentication
-     * @param {string} refreshToken - Refresh token from google authentication
-     * @param {Object} profile - User's google profile
-     * @param {Function} done - Callback function that finish the authentication
-     * @returns {Promise<void>} - Promise resolved when authentication is complete
-     * @throws {CustomError} - If something goes wrong with the authentication or with the database
-     */
     async function (request, accessToken, refreshToken, profile, done) {
       try {
         const foundUser = await userService.getByFilter({
@@ -33,10 +21,7 @@ passport.use(
         });
 
         if (!foundUser) {
-          const profilePhoto =
-            await uploadImageToCloudinary(
-              profile.picture
-            );
+          const profilePhoto = await uploadImageToCloudinary(profile.picture);
 
           const newUser = {
             email: profile.email,
@@ -50,6 +35,7 @@ passport.use(
 
           return done(null, createdUser);
         }
+        
         return done(null, foundUser);
       } catch (error) {
         return done(error);

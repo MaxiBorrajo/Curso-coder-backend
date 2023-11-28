@@ -62,20 +62,7 @@ async function getProductsByCategory(req, res, next) {
     const { page } = req.query;
     const { ctid } = req.params;
 
-    const products = await categoryService.getProductsByCategory(ctid, page);
-
-    products.status = products.payload.length > 0 ? "success" : "error";
-
-    delete products.totalDocs;
-    delete products.limit;
-    delete products.pagingCounter;
-
-    products.prevLink = products.hasPrevPage
-      ? `http://localhost:8080/api/categories/${ctid}/products?page=${products.prevPage}`
-      : null;
-    products.nextLink = products.hasNextPage
-      ? `http://localhost:8080/api/categories/${ctid}/products?page=${products.nextPage}`
-      : null;
+    const products = await categorizedService.getProductsByCategory(ctid, page);
 
     res.status(200).json({ message: products });
   } catch (error) {

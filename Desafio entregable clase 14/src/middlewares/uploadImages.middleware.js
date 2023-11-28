@@ -30,7 +30,6 @@ async function uploadImageToCloudinary(file) {
 }
 
 async function deleteImageInCloud(publicId) {
-  //check
   try {
     const deletedImage = await cloudinary.v2.uploader.destroy(publicId);
 

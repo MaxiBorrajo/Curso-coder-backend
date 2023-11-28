@@ -24,20 +24,7 @@ async function getProductsOfCartById(req, res, next) {
     const { cid } = req.params;
 
     const products = await addedService.getProductsOfCart(cid, 10, page);
-
-    products.status = products.payload.length > 0 ? "success" : "error";
-
-    delete products.totalDocs;
-    delete products.limit;
-    delete products.pagingCounter;
-
-    products.prevLink = products.hasPrevPage
-      ? `http://localhost:8080/api/carts/${cid}/products?page=${products.prevPage}`
-      : null;
-    products.nextLink = products.hasNextPage
-      ? `http://localhost:8080/api/carts/${cid}/products?page=${products.nextPage}`
-      : null;
-
+    
     res.status(200).json({ products: products });
   } catch (error) {
     next(error);

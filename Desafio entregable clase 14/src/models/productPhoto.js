@@ -25,7 +25,7 @@ const productPhotoSchema = new mongoose.Schema(
 );
 
 productPhotoSchema.pre(
-  "findOneAndDelete",
+  ["findOneAndDelete","deleteOne","deleteMany"],
   async function (next) {
     try {
       const docToDelete = await this.model.findOne(this.getQuery());

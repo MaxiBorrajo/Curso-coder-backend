@@ -6,6 +6,7 @@ async function addPhotoToProduct(req, res, next) {
       publicId: req.file.publicId,
       urlProductPhoto: req.file.url,
     };
+    
     const photoProduct = { ...req.body, ...file };
 
     const photoProductCreated = await photoProductService.create(photoProduct);

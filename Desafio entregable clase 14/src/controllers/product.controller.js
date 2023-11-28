@@ -14,44 +14,6 @@ async function getProducts(req, res, next) {
       keyword
     );
 
-    products.status = products.payload.length > 0 ? "success" : "error";
-
-    delete products.totalDocs;
-    delete products.limit;
-    delete products.pagingCounter;
-
-    products.prevLink = products.hasPrevPage
-      ? `http://localhost:8080/api/products?page=${products.prevPage}`
-      : null;
-    products.nextLink = products.hasNextPage
-      ? `http://localhost:8080/api/products?page=${products.nextPage}`
-      : null;
-
-    products.prevLink =
-      sort && order && products.prevLink
-        ? products.prevLink + `&sort=${sort}&order=${order}`
-        : products.prevLink;
-    products.nextLink =
-      sort && order && products.nextLink
-        ? products.nextLink + `&sort=${sort}&order=${order}`
-        : products.nextLink;
-    products.prevLink =
-      keyword && products.prevLink
-        ? products.prevLink + `&keyboard=${keyword}`
-        : products.prevLink;
-    products.nextLink =
-      keyword && products.nextLink
-        ? products.nextLink + `&keyboard=${keyword}`
-        : products.nextLink;
-    products.prevLink =
-      limit && products.prevLink
-        ? products.prevLink + `&limit=${limit}`
-        : products.prevLink;
-    products.nextLink =
-      limit && products.nextLink
-        ? products.nextLink + `&limit=${limit}`
-        : products.nextLink;
-
     res.status(200).json({ message: products });
   } catch (error) {
     next(error);
@@ -64,11 +26,11 @@ async function getProductById(req, res, next) {
 
     const product = await productService.getById(pid);
 
-    if (product) {
-      res.status(200).json({ message: product });
-    } else {
-      res.status(400).json({ message: "Not found" });
+    if (!product) {
+      return res.status(400).json({ message: "Not found" });
     }
+
+    return res.status(200).json({ message: product });
   } catch (error) {
     next(error);
   }
@@ -127,5 +89,5 @@ export {
   getProductById,
   updateProductById,
   deleteProductById,
-  getProductsOwnedByUser
+  getProductsOwnedByUser,
 };

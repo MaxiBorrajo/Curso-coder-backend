@@ -1,0 +1,41 @@
+import comment from "../../models/comment.js";
+import BaseDao from "./Base.dao.js";
+
+class CommentDao extends BaseDao {
+  constructor() {
+    super(comment);
+  }
+
+  async create(object) {
+    try {
+      const foundObject = await this.getByFilter({
+        idProduct: object.idProduct,
+        idUser: object.idUser,
+      });
+
+      if (foundObject) {
+        throw new Error("Comment already exists");
+      }
+
+      return await super.create(object);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getCommentsOfProduct(idProduct, limit = 10) {
+    try {
+      const foundObjects = await this.model
+        .find({ idProduct: idProduct })
+        .limit(limit)
+        .sort({ createdAt: -1 });
+
+      return foundObjects;
+    } catch (error) {
+      console.error("Error en getCommentsOfProduct:", error);
+      throw new Error("Error al obtener los comentarios del producto");
+    }
+  }
+}
+
+export default new CommentDao();
