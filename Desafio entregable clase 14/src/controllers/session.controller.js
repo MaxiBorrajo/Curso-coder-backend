@@ -1,5 +1,5 @@
 import userService from "../services/User.service.js";
-import { generateToken } from "../utils.js";
+import { generateToken, customResponse } from "../utils.js";
 
 async function register(req, res, next) {
   try {
@@ -7,10 +7,10 @@ async function register(req, res, next) {
 
     const response = {
       token: await generateToken(result.toJSON()),
-      user: result
-    }
+      user: result,
+    };
 
-    res.status(200).json({ message: response });
+    return customResponse(res, 201, response);
   } catch (error) {
     next(error);
   }
@@ -20,7 +20,7 @@ async function login(req, res, next) {
   try {
     const result = await userService.login(req.body);
 
-    res.status(200).json({ message: result });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -37,7 +37,7 @@ async function logout(req, res, next) {
 
 async function getActualUser(req, res, next) {
   try {
-    res.status(200).send({ message: req.user });
+    return customResponse(res, 200, req.user);
   } catch (error) {
     next(error);
   }

@@ -29,8 +29,7 @@ class CategorizedService extends BaseService {
 
       return foundObjects;
     } catch (error) {
-      console.error("Error en getProductsByCategory:", error);
-      throw new Error("Error al obtener los productos por categoria");
+      throw error;
     }
   }
 }

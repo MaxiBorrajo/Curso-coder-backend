@@ -22,8 +22,7 @@ class RatingDao extends BaseDao {
 
       return rating;
     } catch (error) {
-      console.error("Error en create:", error);
-      throw new Error("Error al valorar producto");
+      throw error;
     }
   }
 }

@@ -36,7 +36,7 @@ class ProductDao extends BaseDao {
       
       return foundObjects;
     } catch (error) {
-      throw new Error("Error al buscar productos: " + error);
+      throw error;
     }
   }
 }

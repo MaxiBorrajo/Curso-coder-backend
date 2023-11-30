@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { CustomError } from "../utils";
 
 function body_must_contain_attributes(mustAttributes) {
   return function (req, res, next) {
@@ -12,9 +13,11 @@ function body_must_contain_attributes(mustAttributes) {
 
       if (!_.isEqual(intersectedAttributes.sort(), mustAttributes.sort())) {
         const missingAttributes = _.difference(mustAttributes, bodyAttributes);
-        return res.status(400).json({
-          message: `The body is missing the following attributes: ${missingAttributes}`,
-        });
+
+        throw new CustomError(
+          400,
+          `The body is missing the following attributes: ${missingAttributes}`
+        );
       }
 
       return next();
@@ -37,9 +40,10 @@ function meetsWithEmailRequirements(req, res, next) {
     const emailRegularExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegularExpression.test(email)) {
-      return res.status(422).json({
-        message: `The value of the 'email' attribute must be a valid email address`,
-      });
+      throw new CustomError(
+        400,
+        `The value of the 'email' attribute must be a valid email address`
+      );
     }
 
     return next();
@@ -53,19 +57,17 @@ function meetsWithPasswordRequirements(req, res, next) {
     const password = req.body.password;
 
     if (!password) {
-      return res.status(400).json({
-        message: "A 'password' attribute is required",
-      });
+      throw new CustomError(400, "A 'password' attribute is required");
     }
 
     const passwordRegularExpression =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!passwordRegularExpression.test(password)) {
-      return res.status(422).json({
-        message:
-          "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8 characters or longer.",
-      });
+      throw new CustomError(
+        400,
+        "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8 characters or longer."
+      );
     }
 
     return next();

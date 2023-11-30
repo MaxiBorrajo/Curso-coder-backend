@@ -1,6 +1,7 @@
 import BaseDao from "./Base.dao.js";
 import added from "../../models/added.js";
 import cartService from "../../services/Cart.service.js";
+import { CustomError } from "../../utils.js";
 
 class AddedDao extends BaseDao {
   constructor() {
@@ -18,7 +19,7 @@ class AddedDao extends BaseDao {
           ? "Product already bought"
           : "Product already added to cart";
 
-        throw new Error(error);
+        throw new CustomError(400, error);
       }
 
       const foundCart = await cartService.getByFilter({
@@ -53,8 +54,7 @@ class AddedDao extends BaseDao {
 
       return foundObjects;
     } catch (error) {
-      console.error("Error en getProductsOfCart:", error);
-      throw new Error("Error al obtener los productos del carrito");
+      throw error;
     }
   }
 
@@ -68,14 +68,9 @@ class AddedDao extends BaseDao {
 
       return foundProduct;
     } catch (error) {
-      console.error("Error en productAlreadyAdded:", error);
-      throw new Error(
-        "Error al obtener si el producto ya fue añadido al carrito"
-      );
+      throw error;
     }
   }
-
-  
 }
 
 export default new AddedDao();

@@ -30,7 +30,7 @@ class AddedService extends BaseService {
 
       return foundObjects;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -44,7 +44,7 @@ class AddedService extends BaseService {
 
       return foundProduct;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -91,8 +91,7 @@ class AddedService extends BaseService {
 
       return aggregateQuery;
     } catch (error) {
-      console.error("Error en getHistoryOfBuys:", error);
-      throw new Error("Error al obtener el historial de compras");
+      throw error;
     }
   }
 
@@ -106,8 +105,7 @@ class AddedService extends BaseService {
 
       return products;
     } catch (error) {
-      console.error("Error en getHistoryOfBuys:", error);
-      throw new Error("Error al obtener el historial de compras");
+      throw error;
     }
   }
 }

@@ -67,6 +67,7 @@ app.use("/", viewsRoute);
 //Global middlewares
 app.use(errorHandlerMiddleware);
 
+//Servers
 const httpServer = app.listen(8080, () => {
   console.log(`Listening on port 8080`);
   databaseConnection();
@@ -80,6 +81,5 @@ const onConnection = async (socket) => {
 };
 
 socketServer.on("connection", onConnection);
-
 
 export default app;

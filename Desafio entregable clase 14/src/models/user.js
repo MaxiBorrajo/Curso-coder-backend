@@ -78,7 +78,7 @@ userSchema.pre(["findByIdAndDelete", "findOneAndDelete", "deleteOne", "deleteMan
 
     next();
   } catch (error) {
-    next(error);
+    throw error;
   }
 });
 

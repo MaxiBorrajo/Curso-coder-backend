@@ -41,13 +41,16 @@ productSchema.plugin(mongoosePaginate);
 productSchema.pre("findByIdAndDelete", async function (next) {
   try {
     const docToDelete = await this.model.findOne(this.getQuery());
+
     const relationships = [added, categorized, productPhoto, rating];
+
     for (const relation of relationships) {
       await relation.deleteMany({ idProduct: docToDelete._id });
     }
+    
     next();
   } catch (error) {
-    next(error);
+    throw error;
   }
 });
 

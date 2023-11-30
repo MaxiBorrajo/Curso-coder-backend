@@ -21,9 +21,10 @@ categorySchema.pre(
   async function (next) {
     try {
       await categorized.deleteMany({ idCategory: this._id });
+
       next();
     } catch (error) {
-      next(error);
+      throw error;
     }
   }
 );

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import { CustomError } from "../utils.js";
 mongoose.set("strictQuery", true);
 
 const DB_URI =
@@ -14,7 +14,10 @@ async function databaseConnection() {
       console.log("Succesfully connected to database");
     })
     .catch((err) => {
-      throw new Error(`Connection to database failed, ERROR: ${err.message}`);
+      throw new CustomError(
+        500,
+        `Connection to database failed, ERROR: ${err.message}`
+      );
     });
 }
 

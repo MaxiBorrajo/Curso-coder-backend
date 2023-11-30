@@ -1,4 +1,5 @@
 import photoProductService from "../services/ProductPhoto.service.js";
+import { customResponse } from "../utils.js";
 
 async function addPhotoToProduct(req, res, next) {
   try {
@@ -6,12 +7,12 @@ async function addPhotoToProduct(req, res, next) {
       publicId: req.file.publicId,
       urlProductPhoto: req.file.url,
     };
-    
+
     const photoProduct = { ...req.body, ...file };
 
-    const photoProductCreated = await photoProductService.create(photoProduct);
+    const result = await photoProductService.create(photoProduct);
 
-    res.status(201).json({ message: photoProductCreated });
+    return customResponse(res, 201, result);
   } catch (error) {
     next(error);
   }
@@ -21,11 +22,11 @@ async function getPhotosOfProduct(req, res, next) {
   try {
     const { pid } = req.params;
 
-    const photoProducts = await photoProductService.getAll({
+    const result = await photoProductService.getAll({
       idProduct: pid,
     });
 
-    res.status(201).json({ message: photoProducts });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -35,9 +36,9 @@ async function deletePhotoProduct(req, res, next) {
   try {
     const { ppid } = req.params;
 
-    const photoProductDeleted = await photoProductService.deleteById(ppid);
+    const result = await photoProductService.deleteById(ppid);
 
-    res.status(201).json({ message: photoProductDeleted });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }

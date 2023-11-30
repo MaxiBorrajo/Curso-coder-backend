@@ -1,5 +1,6 @@
 import comment from "../../models/comment.js";
 import BaseDao from "./Base.dao.js";
+import { CustomError } from "../../utils.js";
 
 class CommentDao extends BaseDao {
   constructor() {
@@ -14,7 +15,7 @@ class CommentDao extends BaseDao {
       });
 
       if (foundObject) {
-        throw new Error("Comment already exists");
+        throw new CustomError(400, "Comment already exists");
       }
 
       return await super.create(object);
@@ -32,8 +33,7 @@ class CommentDao extends BaseDao {
 
       return foundObjects;
     } catch (error) {
-      console.error("Error en getCommentsOfProduct:", error);
-      throw new Error("Error al obtener los comentarios del producto");
+      throw error;
     }
   }
 }

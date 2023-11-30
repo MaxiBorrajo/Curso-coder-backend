@@ -29,10 +29,12 @@ productPhotoSchema.pre(
   async function (next) {
     try {
       const docToDelete = await this.model.findOne(this.getQuery());
+
       await deleteImageInCloud(docToDelete.publicId);
+
       next();
     } catch (error) {
-      next(error);
+      throw error;
     }
   }
 );

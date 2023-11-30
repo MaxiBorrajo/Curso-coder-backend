@@ -1,5 +1,6 @@
 import cartService from "../services/Cart.service.js";
 import addedService from "../services/Added.service.js";
+import { customResponse } from "../utils.js";
 
 async function addProductToCart(req, res, next) {
   try {
@@ -12,7 +13,7 @@ async function addProductToCart(req, res, next) {
 
     const result = await addedService.create(data);
 
-    res.status(200).json({ message: result });
+    return customResponse(res, 201, result);
   } catch (error) {
     next(error);
   }
@@ -23,9 +24,9 @@ async function getProductsOfCartById(req, res, next) {
     const { page } = req.query;
     const { cid } = req.params;
 
-    const products = await addedService.getProductsOfCart(cid, 10, page);
-    
-    res.status(200).json({ products: products });
+    const result = await addedService.getProductsOfCart(cid, 10, page);
+
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -37,7 +38,7 @@ async function deleteProductFromCart(req, res, next) {
 
     const result = await addedService.deleteById(aid);
 
-    res.status(200).json({ message: result });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -52,7 +53,7 @@ async function getCartOfActiveUser(req, res, next) {
       bought: false,
     });
 
-    res.status(200).json({ message: result });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -65,7 +66,7 @@ async function productAlreadyAddedToCart(req, res, next) {
 
     const result = await addedService.productAlreadyAdded(cid, pid, uid);
 
-    res.status(200).json({ message: result });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -76,9 +77,9 @@ async function buyCart(req, res, next) {
     const uid = req.user._id;
     const { cid } = req.params;
 
-    const purchase = await cartService.buyCartById(cid, uid);
+    const result = await cartService.buyCartById(cid, uid);
 
-    res.status(200).json({ message: purchase });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -89,9 +90,9 @@ async function getHistoryBuysOfCurrentUser(req, res, next) {
     const uid = req.user._id;
     const { limit } = req.query;
 
-    const history = await cartService.getHistoryOfBuys(uid, limit);
+    const result = await cartService.getHistoryOfBuys(uid, limit);
 
-    res.status(200).json({ message: history });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -102,9 +103,9 @@ async function productIsBought(req, res, next) {
     const uid = req.user._id;
     const { pid } = req.params;
 
-    const productBought = await cartService.productAlreadyBuy(uid, pid);
+    const result = await cartService.productAlreadyBuy(uid, pid);
 
-    res.status(200).json({ message: productBought });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }

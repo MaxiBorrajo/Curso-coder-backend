@@ -1,4 +1,5 @@
 import userService from "../services/User.service.js";
+import { customResponse } from "../utils.js";
 
 async function deleteCurrentUser(req, res, next) {
   try {
@@ -11,7 +12,7 @@ async function deleteCurrentUser(req, res, next) {
 
       await userService.deleteById(uid);
 
-      res.status(200).json({ message: "User deleted successfully" });
+      return customResponse(res, 200, "User deleted successfully");
     });
   } catch (error) {
     next(error);
@@ -31,10 +32,10 @@ async function updateCurrentUser(req, res, next) {
         },
       };
     }
-    
-    const updatedUser = await userService.updateById(uid, req.body);
 
-    res.status(200).send({ message: updatedUser });
+    const result = await userService.updateById(uid, req.body);
+
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }

@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import userService from "../services/User.service.js";
+import { CustomError } from "../utils.js";
 
 async function isAuthenticated(req, res, next) {
   if (req.isAuthenticated() || (await jwtValid(req, res, next))) {
     next();
   } else {
-    res.redirect("http://localhost:8080/login");
+    next(new CustomError(401, "Invalid credentials"));
   }
 }
 
@@ -13,7 +14,7 @@ async function isNotAuthenticated(req, res, next) {
   if (!req.isAuthenticated() && !(await jwtValid(req, res, next))) {
     next();
   } else {
-    res.redirect("http://localhost:8080/products");
+    next(new CustomError(401, "You have to logout to access this page"));
   }
 }
 
@@ -26,6 +27,7 @@ async function jwtValid(req, res, next) {
     }
 
     const token = authHeader.replace("Bearer ", "");
+
     const responseToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const foundUser = await userService.getById(responseToken._id);

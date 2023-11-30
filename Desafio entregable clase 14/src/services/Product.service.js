@@ -24,7 +24,7 @@ class ProductService extends BaseService {
 
       return products;
     } catch (error) {
-      throw new Error("Error al buscar productos");
+      throw error;
     }
   }
 
@@ -79,7 +79,7 @@ class ProductService extends BaseService {
 
       return products;
     } catch (error) {
-      throw new Error("Error al buscar productos: " + error);
+      throw error;
     }
   }
 }

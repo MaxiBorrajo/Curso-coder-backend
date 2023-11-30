@@ -1,6 +1,7 @@
 import user from "../../models/user.js";
 import BaseDao from "./Base.dao.js";
 import { deleteImageInCloud } from "../../middlewares/uploadImages.middleware.js";
+import { CustomError } from "../../utils.js";
 
 class UserDao extends BaseDao {
   constructor() {
@@ -26,12 +27,12 @@ class UserDao extends BaseDao {
       const foundUser = await this.getByFilter({ email: object.email });
 
       if (foundUser) {
-        throw new Error("User already exists");
+        throw new CustomError(400, "User already exists");
       }
 
       return super.create(object);
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 

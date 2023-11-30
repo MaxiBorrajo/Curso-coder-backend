@@ -1,6 +1,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
+import { response } from "express";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -10,4 +11,15 @@ async function generateToken(data) {
   return token;
 }
 
-export { __dirname, generateToken };
+async function customResponse(res, status, message) {
+  return res.status(status).json({ message: message });
+}
+
+class CustomError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
+export { __dirname, generateToken, customResponse, CustomError };

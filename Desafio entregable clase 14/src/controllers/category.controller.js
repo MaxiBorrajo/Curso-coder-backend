@@ -1,13 +1,14 @@
 import categorizedService from "../services/Categorized.service.js";
 import categoryService from "../services/Category.service.js";
+import { customResponse } from "../utils.js";
 
 async function getCategories(req, res, next) {
   try {
     const { keyword } = req.query;
-    
-    const categories = await categoryService.getAll({}, keyword);
 
-    res.status(200).json({ message: categories });
+    const result = await categoryService.getAll({}, keyword);
+
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -15,9 +16,9 @@ async function getCategories(req, res, next) {
 
 async function addProductToCategory(req, res, next) {
   try {
-    const addedProductToCategory = await categorizedService.create(req.body);
+    const result = await categorizedService.create(req.body);
 
-    res.status(200).json({ message: addedProductToCategory });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -26,11 +27,13 @@ async function addProductToCategory(req, res, next) {
 async function deleteProductFromCategory(req, res, next) {
   try {
     const { ctid, pid } = req.params;
-    
-    const deletedProductFromCategory =
-      await categorizedService.deleteProductFromCategory(pid, ctid);
 
-    res.status(200).json({ message: deletedProductFromCategory });
+    const result = await categorizedService.deleteProductFromCategory(
+      pid,
+      ctid
+    );
+
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -38,9 +41,9 @@ async function deleteProductFromCategory(req, res, next) {
 
 async function createCategory(req, res, next) {
   try {
-    const createdCategory = await categoryService.create(req.body);
+    const result = await categoryService.create(req.body);
 
-    res.status(200).json({ message: createdCategory });
+    return customResponse(res, 201, result);
   } catch (error) {
     next(error);
   }
@@ -50,9 +53,9 @@ async function deleteCategory(req, res, next) {
   try {
     const { ctid } = req.params;
 
-    const deletedCategory = await categoryService.deleteById(ctid);
+    const result = await categoryService.deleteById(ctid);
 
-    res.status(200).json({ message: deletedCategory });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }
@@ -63,9 +66,9 @@ async function getProductsByCategory(req, res, next) {
     const { page } = req.query;
     const { ctid } = req.params;
 
-    const products = await categorizedService.getProductsByCategory(ctid, page);
+    const result = await categorizedService.getProductsByCategory(ctid, page);
 
-    res.status(200).json({ message: products });
+    return customResponse(res, 200, result);
   } catch (error) {
     next(error);
   }

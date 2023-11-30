@@ -1,5 +1,6 @@
 import categorized from "../../models/categorized.js";
 import BaseDao from "./Base.dao.js";
+import { CustomError } from "../../utils.js";
 
 class CategorizedDao extends BaseDao {
   constructor() {
@@ -11,13 +12,12 @@ class CategorizedDao extends BaseDao {
       const foundProductInCategory = await this.getByFilter(data);
 
       if (foundProductInCategory) {
-        throw new Error("Product already in category");
+        throw new CustomError(400, "Product already in category");
       }
 
       return super.create(data);
     } catch (error) {
-      console.error("Error en addProductToCategory:", error);
-      throw new Error("Error al añadir product a categoria");
+      throw error;
     }
   }
 
@@ -40,8 +40,7 @@ class CategorizedDao extends BaseDao {
 
       return foundObjects;
     } catch (error) {
-      console.error("Error en getProductsByCategory:", error);
-      throw new Error("Error al obtener los productos por categoria");
+      throw error;
     }
   }
 }

@@ -57,7 +57,7 @@ async function processImage(req, res, next) {
 
     return next();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 

@@ -46,10 +46,7 @@ class RatingService extends BaseService {
 
       return aggregateQuery;
     } catch (error) {
-      console.error("Error en getMostValueProductsRecently:", error);
-      throw new Error(
-        "Error al obtener los productos mejor valorados recientemente"
-      );
+      throw error;
     }
   }
 
@@ -91,8 +88,7 @@ class RatingService extends BaseService {
         count: ratingCount,
       };
     } catch (error) {
-      console.error("Error en getPromedyOfRatingProduct:", error);
-      throw new Error("Error al obtener la valoracion de un producto");
+      throw error;
     }
   }
 }

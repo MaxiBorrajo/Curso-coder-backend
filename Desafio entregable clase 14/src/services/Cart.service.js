@@ -22,8 +22,7 @@ class CartService extends BaseService {
 
       return foundCart.bought;
     } catch (error) {
-      console.error("Error en productAlreadyBuy:", error);
-      throw new Error("Error al saber si producto ya fue comprado");
+      throw error;
     }
   }
 
@@ -35,8 +34,7 @@ class CartService extends BaseService {
 
       return boughtCart;
     } catch (error) {
-      console.error("Error en buyCartById:", error);
-      throw new Error("Error al comprar carrito");
+      throw error;
     }
   }
 }
