@@ -141,7 +141,9 @@ class CartService extends BaseService {
 
       const productsTemplate = foundObject.products
         .map(
-          (product) => `<li style="display:flex;justify-content:center;align-items:center;width:100%;margin-top:20px">
+          (
+            product
+          ) => `<li style="display:flex;justify-content:center;align-items:center;width:100%;margin-top:20px">
       <img src="${product.url_front_page}" width="100px"/>
       <div style="margin-left:20px;">
       <p>Title: ${product.title}</p>
@@ -221,6 +223,17 @@ class CartService extends BaseService {
       const foundHistory = await this.getAll(query);
 
       return foundHistory;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async productAddedToCart(productId, cartID) {
+    try {
+      const foundCart = await this.getById(+cartID);
+      const foundProduct = await ProductService.getById(+productId);
+      const result = await foundCart.hasProduct(foundProduct);
+      return result;
     } catch (error) {
       throw error;
     }

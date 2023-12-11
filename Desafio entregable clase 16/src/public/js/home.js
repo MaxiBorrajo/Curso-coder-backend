@@ -2,14 +2,6 @@ const added = document.getElementById("added");
 const discounts = document.getElementById("discounts");
 const populars = document.getElementById("populars");
 const hero = document.getElementById("hero");
-const searchBar = document.getElementById("searchBar")
-
-searchBar.onkeyup = (e) => {
-  e.preventDefault();
-  if(e.keyCode === 13 && searchBar.value) {
-    window.location(`http://localhost:8080/products?keyword=${searchBar.value}`)
-  }
-}
 
 hero.style.backgroundImage = "url('../assets/pexels-pixabay-159393.jpg')";
 
@@ -19,12 +11,15 @@ let productsPopulars = [];
 
 async function getProducts(url, template) {
   try {
-    const response = await fetch(url);
-    const responseJson = await response.json();
+    const response = await axios.get(url);
 
-    compileProducts(responseJson.message.rows, template);
+    compileProducts(response.data.message.rows, template);
   } catch (err) {
-    alert(err.message);
+    if (err.response) {
+      alert(`${err.response.data.Error}`);
+    } else {
+      alert(err);
+    }
   }
 }
 

@@ -21,6 +21,8 @@ import {
   getAllProductsHandler,
   messagesHandler,
   getRandomBuy,
+  getAllCategoriesHandler,
+  getAllDevelopersHandler,
 } from "./handlers/handlers.js";
 import { Database } from "./config/database.connection.js";
 import passport from "passport";
@@ -81,6 +83,8 @@ const onConnection = async (socket) => {
   await getAllProductsHandler(socketServer, socket);
   await messagesHandler(socketServer, socket);
   await getRandomBuy(socketServer, socket);
+  await getAllCategoriesHandler(socketServer, socket);
+  await getAllDevelopersHandler(socketServer, socket);
 };
 
 socketServer.on("connection", onConnection);

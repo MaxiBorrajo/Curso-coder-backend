@@ -49,7 +49,7 @@ export const User = await instanceDatabase.define("user", {
   url_profile_photo: {
     type: DataTypes.STRING,
     defaultValue:
-      "https://asset.cloudinary.com/dixntuyk8/86914f2b6bc2dfd2b6a69aa670cd4853",
+      "https://res.cloudinary.com/dixntuyk8/image/upload/v1693830223/x1vdmydenrkd3luzvjv6.png",
   },
   profile_public_id: {
     type: DataTypes.STRING,

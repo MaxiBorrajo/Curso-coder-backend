@@ -1,135 +1,135 @@
-const socketClient = io();
-let products = [];
-let error = "";
-const productsList = document.getElementById("productsList");
+const socketClientAdmin = io();
+const listProducts = document.getElementById("listProducts");
+const back = document.getElementById("back");
+const createProductForm = document.getElementById("createProductForm");
+const deleteProductForm = document.getElementById("deleteProductForm");
 
-socketClient.emit("getAllProducts");
-
-const addProductForm = document.getElementById("addProductForm");
-const updateProductForm = document.getElementById("updateProductForm");
-const deleteForm = document.getElementById("deleteForm");
-
-let updateProductId = document.getElementById("updateProductId");
-let deleteProductId = document.getElementById("deleteProductId");
-
-function validNewProduct(product) {
-  return (
-    product.title &&
-    product.description &&
-    product.code &&
-    product.price >= 0 &&
-    product.stock >= 0
-  );
-}
-
-addProductForm.onsubmit = async (e) => {
-  e.preventDefault();
-  let newProduct = {
-    title: document.getElementById("newProductTitle").value,
-    description: document.getElementById("newProductDescription").value,
-    price: document.getElementById("newProductPrice").value,
-    code: document.getElementById("newProductCode").value,
-    stock: document.getElementById("newProductStock").value,
-    category: document.getElementById("newProductCategory").value,
-    status: true,
-  };
-
-  if (validNewProduct(newProduct)) {
-    await addNewProduct(newProduct);
-  }
-};
-
-updateProductForm.onsubmit = async (e) => {
-  e.preventDefault();
-  let updateProductPrice = {
-    price: document.getElementById("updateProductPrice").value,
-  };
-  if (updateProductPrice.price !== 0 && updateProductId.value !== '') {
-    await updateProduct(updateProductId.value, updateProductPrice);
-  }
-};
-
-deleteForm.onsubmit = async (e) => {
-  e.preventDefault();
-  if (deleteProductId.value !== '') {
-    await deleteProduct(deleteProductId.value);
-  }
-};
-
-async function addNewProduct(product) {
+async function createProduct(newData) {
   try {
-    const result = await fetch("http://localhost:8080/api/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-    });
+    validateProduct(newData);
 
-    if (result) {
-      socketClient.emit("getAllProducts");
-    }
-  } catch (err) {
-    console.log(err);
-    error = err;
-  }
-}
-
-async function updateProduct(idProduct, product) {
-  try {
-    const result = await fetch(
-      `http://localhost:8080/api/products/${idProduct}`,
-      {
-        method: "PUT",
+    if (Cookies.get("token")) {
+      await axios.post("http://localhost:8080/api/products/", newData, {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: Cookies.get("token"),
         },
-        body: JSON.stringify(product),
-      }
-    );
-
-    if (result) {
-      socketClient.emit("getAllProducts");
+      });
+    } else {
+      await axios.post("http://localhost:8080/api/products/", newData);
     }
+
+    socketClientAdmin.emit("getAllProducts");
+
+    const section = document.getElementById("createProductFormMessageSection");
+
+    section.innerText = "Product created successfully";
   } catch (err) {
-    error = err;
+    if (err.response) {
+      alert(`${err.response.data.Error}`);
+    } else {
+      alert(err);
+    }
   }
 }
 
-async function deleteProduct(idProduct) {
+async function deleteProduct(id) {
   try {
-    const result = await fetch(
-      `http://localhost:8080/api/products/${idProduct}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    if (result) {
-      socketClient.emit("getAllProducts");
+    if (!id) {
+      throw new Error("Form incomplete");
     }
+
+    if (Cookies.get("token")) {
+      await axios.delete(`http://localhost:8080/api/products/${id}`, {
+        headers: {
+          Authorization: Cookies.get("token"),
+        },
+      });
+    } else {
+      await axios.delete(`http://localhost:8080/api/products/${id}`);
+    }
+
+    socketClientAdmin.emit("getAllProducts");
+
+    const section = document.getElementById("deleteProductFormMessageSection");
+
+    section.innerText = "Product deleted successfully";
   } catch (err) {
-    error = err;
+    if (err.response) {
+      alert(`${err.response.data.Error}`);
+    } else {
+      alert(err);
+    }
   }
 }
 
-function compileProducts() {
-  const productsTemplate = products
-    .map(
-      (product) => `<li>
-      <p>ID: ${product._id}</p> 
-      <p>Title: ${product.title}</p> 
-      <p>Description: ${product.description}</p> 
-      <p>Price: ${product.price}</p> 
-      <p>Code: ${product.code}</p> 
-      <p>Stock: ${product.stock}</p>
-    </li>`
-    )
-    .join(" ");
-  productsList.innerHTML = productsTemplate;
+back.onclick = (e) => {
+  window.history.back();
+};
+
+socketClientAdmin.emit("getAllProducts");
+
+function compileProducts(products) {
+  const productsTemplate = products.map(
+    (product) => `
+      <a href="http://localhost:8080/products/${product.id}" class="w-full">
+      <div class="p-2 flex items-center gap-x-3 border border-solid border-indigo-500 bg-indigo-50">
+      <p class="text-sm secondary-font">ID: ${product.id}</p>
+      <p class="text-sm secondary-font">Title: ${product.title}</p>
+      <p class="text-sm secondary-font">Price: ${product.price} USD</p>
+      <p class="text-sm secondary-font">Discount: ${product.discount}%</p>
+      </div>
+      </a>
+      `
+  );
+
+  listProducts.innerHTML = "";
+
+  productsTemplate.forEach((template) => {
+    listProducts.innerHTML = listProducts.innerHTML + template;
+  });
 }
 
-socketClient.on("updatedProducts", (_products) => {
-  products = [..._products];
-  compileProducts();
+socketClientAdmin.on("updatedProducts", (products) => {
+  compileProducts(products);
 });
+
+createProductForm.onsubmit = async (e) => {
+  e.preventDefault();
+  const product = {
+    title: document.getElementById("createProductTitle").value,
+    description: document.getElementById("createProductDescription").value,
+    price: document.getElementById("createProductPrice").value,
+    discount: document.getElementById("createProductDiscount").value,
+    release_date: document.getElementById("createProductReleaseDate").value,
+    trailer_video: document.getElementById("createProductVideo").value,
+    developerId: document.getElementById("createProductIdDeveloper").value,
+    CPU: document.getElementById("createProductCPU").value,
+    RAM: document.getElementById("createProductRAM").value,
+    memory: document.getElementById("createProductMemory").value,
+    GPU: document.getElementById("createProductGPU").value,
+  };
+
+  await createProduct(product);
+};
+
+deleteProductForm.onsubmit = async (e) => {
+  e.preventDefault();
+
+  await deleteProduct(+document.getElementById("deleteProductId").value);
+};
+
+function validateProduct(product) {
+  if (
+    !product.title ||
+    !product.description ||
+    !product.price ||
+    !product.release_date ||
+    !product.developerId ||
+    !product.CPU ||
+    !product.RAM ||
+    !product.memory ||
+    !product.GPU
+  ) {
+    throw new Error("Form incomplete");
+  }
+}

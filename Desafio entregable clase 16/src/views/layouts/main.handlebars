@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The best e-commerce in the human history</title>
+    <title>DigitalGaming</title>
     <link rel="stylesheet" href="/styles/styles.css" />
     <link
       rel="stylesheet"
@@ -13,9 +13,59 @@
       referrerpolicy="no-referrer"
     />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
+    <div
+      class="w-full bg-indigo-500 flex justify-between py-3 px-4 items-center"
+    >
+      <a
+        class="text-white primary-font text-xl"
+        href="http://localhost:8080/"
+      >DigitalGaming</a>
+      <div class="flex gap-x-5 items-center">
+        <div
+          class="flex bg-white px-3 py-0.5 search justify-between items-center rounded-2xl"
+        >
+          <input
+            type="text"
+            class="w-full border-0 outline-0 p-0.5 secondary-font"
+            placeholder="Search products..."
+            id="searchBar"
+          />
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <a id="cart" class="text-white" href="http://localhost:8080/login"><i
+            class="fa-solid fa-cart-shopping"
+          ></i></a>
+        <span class="flex gap-x-1" class="text-white" id="login-section">
+
+        </span>
+      </div>
+    </div>
+    <div class="w-full bg-white flex items-center" id="sections">
+      <a
+        href="http://localhost:8080/products"
+        class="secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white"
+      >Catalogue</a>
+      <a
+        href="http://localhost:8080/categories"
+        class="secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white"
+      >Categories</a>
+      <a
+        href="http://localhost:8080/developers"
+        class="secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white"
+      >Developers</a>
+      <a
+        href="http://localhost:8080/opinions"
+        class="secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white"
+      >Opinions</a>
+    </div>
+    <div id="snackbar">hola</div>
     {{{body}}}
     <footer
       class="w-full flex flex-col justify-center items-center bg-indigo-500 p-10 gap-y-10"
@@ -56,10 +106,7 @@
       </div>
     </footer>
   </body>
-
-  <script>
-    const actualYear = document.getElementById("actualYear");
-    actualYear.innerHTML = new Date().getFullYear();
-  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/main.js"></script>
 
 </html>

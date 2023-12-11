@@ -6,7 +6,8 @@ import {
   getCartOfActiveUser,
   buyCart,
   getHistoryBuysOfCurrentUser,
-  getCartById
+  getCartById,
+  productAddedToCart
 } from "../controllers/cart.controller.js";
 
 import { body_must_contain_attributes } from "../middlewares/validationData.middleware.js";
@@ -32,6 +33,6 @@ router.get("/:cid", isAuthenticated, getCartById);//route:✓ anda:✓
 
 router.get("/:cid/buy", isAuthenticated, buyCart);//route:✓ anda:✓ incluir enviar mail ticket o algo asi
 
-
+router.get("/:cid/product/:pid", isAuthenticated, productAddedToCart);
 
 export default router;

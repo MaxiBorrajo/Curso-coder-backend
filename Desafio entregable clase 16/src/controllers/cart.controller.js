@@ -49,9 +49,11 @@ async function getCartOfActiveUser(req, res, next) {
         userId: uid,
         bought: false,
       },
-      include: [{
-        model: Product,
-      }],
+      include: [
+        {
+          model: Product,
+        },
+      ],
     });
 
     return customResponse(res, 200, result);
@@ -79,7 +81,23 @@ async function getHistoryBuysOfCurrentUser(req, res, next) {
     const uid = req.user.id;
     const { startDate, endDate } = req.query;
 
-    const result = await cartService.getHistoryBuysOfCurrentUser(uid, startDate, endDate);
+    const result = await cartService.getHistoryBuysOfCurrentUser(
+      uid,
+      startDate,
+      endDate
+    );
+
+    return customResponse(res, 200, result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function productAddedToCart(req, res, next) {
+  try {
+    const { cid, pid } = req.params;
+
+    const result = await cartService.productAddedToCart(pid, cid);
 
     return customResponse(res, 200, result);
   } catch (error) {
@@ -93,4 +111,5 @@ export {
   buyCart,
   getHistoryBuysOfCurrentUser,
   getCartById,
+  productAddedToCart,
 };

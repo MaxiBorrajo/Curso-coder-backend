@@ -31,6 +31,14 @@ router.get("/realtimeProducts", isAuthenticated, isAdmin, (req, res) => {
   res.render("realtimeProducts");
 });
 
+router.get("/realtimeCategories", isAuthenticated, isAdmin, (req, res) => {
+  res.render("realtimeCategories");
+});
+
+router.get("/realtimeDevelopers", isAuthenticated, isAdmin, (req, res) => {
+  res.render("realtimeDevelopers");
+});
+
 router.get("/chat", isAuthenticated, (req, res) => {
   res.render("chat");
 });
@@ -53,12 +61,7 @@ router.get("/categories", (req, res) => {
 
 router.get("/developers/:did", (req, res) => {
   const developerId = req.params.did;
-  res.render("developers", { developerId });
-});
-
-router.get("/categories/:ctid", (req, res) => {
-  const categoryId = req.params.ctid;
-  res.render("categories", { categoryId });
+  res.render("developer", { developerId });
 });
 
 router.get("/developers", (req, res) => {
@@ -67,6 +70,14 @@ router.get("/developers", (req, res) => {
 
 router.get("/opinions", (req, res) => {
   res.render("opinions");
+});
+
+router.get("/forgotPassword", (req, res) => {
+  res.render("forgotPassword");
+});
+
+router.get("/resetPassword/:token", (req, res) => {
+  res.render("resetPassword");
 });
 
 export default router;

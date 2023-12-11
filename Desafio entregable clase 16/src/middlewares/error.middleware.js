@@ -3,7 +3,7 @@ function errorHandlerMiddleware(err, req, res, next) {
 
   const message = {
     Error: err.message
-      ? `Error: ${err.message}`
+      ? `${err.message}`
       : "Unknown error",
   };
 

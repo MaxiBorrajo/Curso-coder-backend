@@ -22,7 +22,6 @@ logs/
 
 # Archivos y carpetas que contienen claves secretas o información privada
 .env
-global_config/*.json
 
 # Otros
 .DS_Store

@@ -1,4 +1,9 @@
 const registerForm = document.getElementById("registerForm");
+const back = document.getElementById("back");
+
+back.onclick = (e) => {
+  window.history.back();
+};
 
 registerForm.onsubmit = async (e) => {
   e.preventDefault();
@@ -6,7 +11,6 @@ registerForm.onsubmit = async (e) => {
     email: document.getElementById("email").value,
     first_name: document.getElementById("first_name").value,
     last_name: document.getElementById("last_name").value,
-    age: document.getElementById("age").value,
     password: document.getElementById("password").value,
   };
 
@@ -17,19 +21,22 @@ async function register(newUser) {
   try {
     validateUserForm(newUser);
 
-    const result = await fetch("http://localhost:8080/api/sessions/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    });
+    const result = await axios.post(
+      "http://localhost:8080/api/sessions/register",
+      newUser
+    );
 
-    if (result) {
-      location.replace("http://localhost:8080/login");
-    }
+    Cookies.set("token", result.data.message.token, { expires: 7 });
+    Cookies.set("user", JSON.stringify(result.data.message.user), {
+      expires: 7,
+    });
+    location.href = "http://localhost:8080/";
   } catch (err) {
-    alert(`ERROR: ${err}`);
+    if(err.response){
+      alert(`${err.response.data.Error}`);
+    }else{
+      alert(err)
+    }
   }
 }
 
@@ -38,9 +45,12 @@ function validateUserForm(newUser) {
     !newUser.email ||
     !newUser.password ||
     !newUser.first_name ||
-    !newUser.last_name ||
-    !newUser.age
+    !newUser.last_name
   ) {
     throw new Error("Form incomplete");
+  }
+
+  if (newUser.password != document.getElementById("confirm_password").value) {
+    throw new Error("Confirm password do not match");
   }
 }

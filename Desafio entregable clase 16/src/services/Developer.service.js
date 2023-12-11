@@ -7,6 +7,25 @@ class DeveloperService extends BaseService {
     super(developerDao);
   }
 
+  async getById(id) {
+    try {
+      const foundObject = await this.dao.getByFilter({
+        where: {
+          id: id,
+        },
+        include: [
+          {
+            model: Product,
+          },
+        ],
+      });
+
+      return foundObject;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async updateById(id, object) {
     try {
       const foundObject = await this.getById(id);

@@ -2,6 +2,8 @@ import ProductDao from "../dao/DBSystem/Product.dao.js";
 import BaseService from "./base.service.js";
 import { CustomError } from "../utils.js";
 import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
+import { Category } from "../models/category.js";
+import { Developer } from "../models/developer.js";
 
 class ProductService extends BaseService {
   constructor() {
@@ -24,7 +26,19 @@ class ProductService extends BaseService {
 
   async getById(id) {
     try {
-      const foundObject = await super.getById(id);
+      const foundObject = await this.getByFilter({
+        where: {
+          id: id,
+        },
+        include: [
+          {
+            model: Category,
+          },
+          {
+            model: Developer,
+          },
+        ],
+      });
 
       if (!foundObject) {
         throw new CustomError(400, "Product not found");

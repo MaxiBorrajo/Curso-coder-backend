@@ -38,11 +38,11 @@ passport.use(
 
           const userDto = new UserDto(
             createdUser.id,
-            createdUser.first_name,
-            createdUser.last_name,
+            newUser.first_name,
+            newUser.last_name,
             createdUser.email,
             createdUser.role,
-            createdUser.url_profile_photo
+            newUser.url_profile_photo
           );
 
           return done(null, userDto);
@@ -58,7 +58,7 @@ passport.use(
 
           return done(null, userDto);
         } else {
-          throw new CustomError(400, "User not found");
+          return done(new CustomError(400, "Your registration is not through Google, go to http://localhost:8080/login to log in"));
         }
       } catch (error) {
         return done(error);

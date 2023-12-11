@@ -1,7 +1,8 @@
 import userService from "../services/User.service.js";
 import { customResponse } from "../utils.js";
 
-async function deleteCurrentUser(req, res, next) {//controller:✓
+async function deleteCurrentUser(req, res, next) {
+  //controller:✓
   try {
     const uid = req.user.id;
 
@@ -9,17 +10,18 @@ async function deleteCurrentUser(req, res, next) {//controller:✓
       if (err) {
         return next(err);
       }
-
-      await userService.deleteById(uid);
-
-      return customResponse(res, 200, "User deleted successfully");
     });
+
+    await userService.deleteById(uid);
+
+    return customResponse(res, 200, "User deleted successfully");
   } catch (error) {
     next(error);
   }
 }
 
-async function updateCurrentUser(req, res, next) {//controller:✓
+async function updateCurrentUser(req, res, next) {
+  //controller:✓
   try {
     const uid = req.user.id;
 
@@ -41,7 +43,8 @@ async function updateCurrentUser(req, res, next) {//controller:✓
   }
 }
 
-async function forgotPassword(req, res, next) {//controller:✓
+async function forgotPassword(req, res, next) {
+  //controller:✓
   try {
     const { email } = req.body;
 
@@ -57,10 +60,11 @@ async function forgotPassword(req, res, next) {//controller:✓
   }
 }
 
-async function resetPassword(req, res, next) {//controller:✓
+async function resetPassword(req, res, next) {
+  //controller:✓
   try {
     const { token } = req.params;
-    const {password} = req.body;
+    const { password } = req.body;
 
     await userService.resetPassword(token, password);
 

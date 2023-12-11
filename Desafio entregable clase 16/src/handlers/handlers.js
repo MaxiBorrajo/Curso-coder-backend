@@ -1,17 +1,33 @@
 import productService from "../services/Product.service.js";
 import messageService from "../services/Message.service.js";
+import categoryService from "../services/Category.service.js";
+import developerService from "../services/Developer.service.js";
 
 async function getAllProductsHandler(io, socket) {
   socket.on("getAllProducts", async () => {
-    const products = await productService.getProducts();
-    io.sockets.emit("updatedProducts", products.payload);
+    const products = await productService.getAll();
+    io.sockets.emit("updatedProducts", products);
+  });
+}
+
+async function getAllCategoriesHandler(io, socket) {
+  socket.on("getAllCategories", async () => {
+    const categories = await categoryService.getAll();
+    io.sockets.emit("updatedCategories", categories);
+  });
+}
+
+async function getAllDevelopersHandler(io, socket) {
+  socket.on("getAllDevelopers", async () => {
+    const developers = await developerService.getAll();
+    io.sockets.emit("updatedDevelopers", developers);
   });
 }
 
 async function getRandomBuy(io, socket) {
   socket.on("productBuy", async (user, product) => {
     const bought = {
-      fullname: user.fullname,
+      fullname: user.firstName + " " + user.lastName,
       product: product,
     };
 
@@ -32,4 +48,10 @@ async function messagesHandler(io, socket) {
   });
 }
 
-export { getAllProductsHandler, messagesHandler, getRandomBuy };
+export {
+  getAllProductsHandler,
+  messagesHandler,
+  getRandomBuy,
+  getAllCategoriesHandler,
+  getAllDevelopersHandler,
+};

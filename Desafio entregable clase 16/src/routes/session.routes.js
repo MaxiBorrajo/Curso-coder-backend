@@ -31,11 +31,12 @@ router.get(
   //route:✓ anda:✓
   "/google/callback",
   passport.authenticate("google", {
+
     failureRedirect: "http://localhost:8080/login",
-  }),
-  (req, res, next) => {
-    //res.redirect("http://localhost:8080/products?oauth=true");
-    res.send("Register/Logged with google");
+  })
+  ,(req, res, next)=>{
+    res.cookie("user", JSON.stringify(req.user))
+    res.redirect("http://localhost:8080")
   }
 );
 
