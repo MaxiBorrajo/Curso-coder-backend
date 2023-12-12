@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   res.render("home");
 });
 
-router.get("/products", isAuthenticated, (req, res) => {
+router.get("/products", (req, res) => {
   res.render("products");
 });
 
@@ -55,10 +55,6 @@ router.get("/profile", isAuthenticated, (req, res) => {
   res.render("profile");
 });
 
-router.get("/categories", (req, res) => {
-  res.render("categories");
-});
-
 router.get("/developers/:did", (req, res) => {
   const developerId = req.params.did;
   res.render("developer", { developerId });
@@ -78,6 +74,10 @@ router.get("/forgotPassword", (req, res) => {
 
 router.get("/resetPassword/:token", (req, res) => {
   res.render("resetPassword");
+});
+
+router.get("/history", isAuthenticated, (req, res) => {
+  res.render("history");
 });
 
 export default router;

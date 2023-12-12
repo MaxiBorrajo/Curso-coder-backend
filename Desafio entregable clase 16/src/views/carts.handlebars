@@ -5,7 +5,14 @@
     class="fa-solid fa-left-long text-lg absolute top-2 left-3 cursor-pointer"
     id="back"
   ></i>
-  <h1 id="cartId" class="text-5xl text-white primary-font pl-5 pt-5">ID cart: {{cartId}}</h1>
+  <span class="flex items-center">
+    <h1 id="cartId" class="text-5xl text-white primary-font pl-5 pt-5">ID cart:
+      {{cartId}}</h1>
+    <a href="http://localhost:8080/history" class="pl-5 pt-5"><i
+        class="fa-solid fa-clock-rotate-left text-white text-xl "
+        title="History of buys"
+      ></i></a>
+  </span>
   <div class="flex gap-x-10">
     <div id="productOfCart" class="w-3/4 flex flex-col gap-y-1">
     </div>

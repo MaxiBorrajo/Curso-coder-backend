@@ -219,6 +219,7 @@ class CartService extends BaseService {
           },
         };
       }
+      console.log(query)
 
       const foundHistory = await this.getAll(query);
 

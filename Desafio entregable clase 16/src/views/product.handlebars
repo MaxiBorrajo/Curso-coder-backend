@@ -8,16 +8,17 @@
   <h1 id="productId" class="text-5xl text-white primary-font pl-5 pt-5">ID
     product:
     {{productId}}</h1>
-  <div class="w-full flex flex-col p-10 bg-indigo-50 rounded-md gap-y-10">
-    <div id="productHero" class="flex gap-x-10 w-full"></div>
+  <div class="w-full flex flex-col p-10 bg-indigo-50 rounded-md">
+    <div id="categoriesProduct" class="w-full flex justify-end pb-3"></div>
+    <div id="productHero" class="flex gap-x-10 w-full pb-10"></div>
     <hr style="height:1px;border-width:0;color:black;background-color:black" />
-    <div id="productDescription" class="flex gap-x-10 w-full"></div>
+    <div id="productDescription" class="flex gap-x-10 w-full py-10"></div>
     <hr style="height:1px;border-width:0;color:black;background-color:black" />
-    <div id="productVideo" class="flex gap-x-10 w-full"></div>
+    <div id="productVideo" class="flex gap-x-10 w-full py-10"></div>
     <hr style="height:1px;border-width:0;color:black;background-color:black" />
     <div
       id="productConfiguration"
-      class="w-full flex flex-col justify-center items-center"
+      class="w-full flex flex-col justify-center items-center pt-5 gap-y-10"
     >
       <h3 class="self-start text-xl primary-font">Update product</h3>
       <span class="flex gap-x-5 justify-center items-center">
@@ -35,7 +36,7 @@
       </span>
       <form
         id="updateProductForm"
-        class="flex flex-wrap gap-x-5 justify-center items-center gap-y-5"
+        class="flex flex-wrap gap-x-5 justify-center items-center gap-y-5 pt-5"
       >
 
         <input
@@ -44,14 +45,7 @@
           placeholder="Title"
           class="input_form"
           style="width: 300px !important;"
-        />
-        <input
-          type="text"
-          id="updateProductDescription"
-          placeholder="Description"
-          class="input_form"
-          style="width: 300px !important;"
-        />
+        />     
         <input
           type="number"
           id="updateProductPrice"
@@ -123,6 +117,11 @@
           class="input_form"
           style="width: 300px !important;"
         />
+        <textarea id="updateProductDescription" cols="30" rows="5" 
+        placeholder="Description"
+        class="input_form"
+        style="width: 530px !important;resize:none;"
+        ></textarea>
         <input
           type="submit"
           value="Submit"

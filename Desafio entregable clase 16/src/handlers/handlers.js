@@ -2,6 +2,8 @@ import productService from "../services/Product.service.js";
 import messageService from "../services/Message.service.js";
 import categoryService from "../services/Category.service.js";
 import developerService from "../services/Developer.service.js";
+import { CustomError } from "../utils.js";
+import { User } from "../models/user.js";
 
 async function getAllProductsHandler(io, socket) {
   socket.on("getAllProducts", async () => {
@@ -36,14 +38,27 @@ async function getRandomBuy(io, socket) {
 }
 
 async function messagesHandler(io, socket) {
-  socket.on("messageSent", async (message) => {
-    await messageService.create(message);
-    const messages = await messageService.getAll();
-    io.sockets.emit("newMessages", messages);
+  socket.on("messageSent", async (message, user) => {
+    message = { ...message, userId: user.id };
+    if (user) {
+      await messageService.create(message);
+      const messages = await messageService.getAll({
+        include: {
+          model: User,
+        },
+      });
+      io.sockets.emit("newMessages", messages);
+    } else {
+      throw new CustomError(401, "Invalid credentials");
+    }
   });
 
   socket.on("getMessages", async () => {
-    const messages = await messageService.getAll();
+    const messages = await messageService.getAll({
+      include: {
+        model: User,
+      },
+    });
     io.sockets.emit("newMessages", messages);
   });
 }

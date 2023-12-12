@@ -29,7 +29,7 @@ const updateProductGPU = document.getElementById("updateProductGPU");
 let added;
 
 if (authenticatedUser && userInfo && userInfo.role === "ADMIN") {
-  productConfiguration.style = "display:contents;";
+  productConfiguration.style = "display:flex;";
 } else {
   productConfiguration.style = "display:none;";
 }
@@ -206,7 +206,6 @@ async function compileProduct(product) {
 
 <div class="flex flex-col gap-y-3">
 <p class="text-5xl primary-font leading-normal">${product.title}</p>
-<div id="categoriesProduct" class="w-full flex flex-wrap gap-x-3"></div>
 <button title="Add product to cart" onclick="addProductToCart()"
 ${added ? "disabled" : ""}
 ${
@@ -214,7 +213,7 @@ ${
     ? "class='w-fit px-3 py-2 bg-gray-600 secondary-font text-white rounded-md text-sm'"
     : "class='w-fit px-3 py-2 bg-orange-600 secondary-font text-white rounded-md text-sm cursor-pointer'"
 }>
-${added ? "" : "<i class='fa-solid fa-cart-plus pr-1'></i>"}
+${added ? "" : "<i class='fa-solid fa-basket-shopping pr-1'></i>"}
 ${added ? "Added to cart" : "Add to cart"}
 </button>
 <p class="text-lg secondary-font">Product purchased by <span class="text-3xl text-orange-600">${
@@ -266,11 +265,16 @@ ${
   const categoriesProduct = document.getElementById("categoriesProduct");
 
   const categoriesTemplate = product.categories.map(
-    (category) => `
-    <a href="http://localhost:8080/products?filter=category&filterValue=${category.id}">
-    <p class="rounded-full p-2 text-white bg-indigo-600 w-fit h-fit text-center text-xs
+    (category, index) => `
+    <a class="h-fit" href="http://localhost:8080/products?filter=category&filterValue=${
+      category.id
+    }">
+    <p class="text-xs
     secondary-font">
-    ${category.category_name}/
+    ${index === product.categories.length - 1
+        ? category.category_name
+        : category.category_name + "/"
+    }
     </p>
     </a>
     `
