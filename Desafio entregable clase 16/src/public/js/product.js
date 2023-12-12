@@ -206,6 +206,7 @@ async function compileProduct(product) {
 
 <div class="flex flex-col gap-y-3">
 <p class="text-5xl primary-font leading-normal">${product.title}</p>
+<div id="categoriesProduct" class="w-full flex flex-wrap gap-x-3"></div>
 <button title="Add product to cart" onclick="addProductToCart()"
 ${added ? "disabled" : ""}
 ${
@@ -261,10 +262,27 @@ ${
   productHero.innerHTML = productHeroTemplate;
   productDescription.innerHTML = productDescriptionTemplate;
   productVideo.innerHTML = productVideoTemplate;
+
+  const categoriesProduct = document.getElementById("categoriesProduct");
+
+  const categoriesTemplate = product.categories.map(
+    (category) => `
+    <a href="http://localhost:8080/products?filter=category&filterValue=${category.id}">
+    <p class="rounded-full p-2 text-white bg-indigo-600 w-fit h-fit text-center text-xs
+    secondary-font">
+    ${category.category_name}/
+    </p>
+    </a>
+    `
+  );
+
+  categoriesTemplate.forEach((template) => {
+    categoriesProduct.innerHTML = categoriesProduct.innerHTML + template;
+  });
 }
 
 getProduct();
-// getCartOfUser();
+
 function validateProduct(product) {
   if (
     !product.title ||

@@ -1,6 +1,7 @@
 import developerDao from "../dao/DBSystem/Developer.dao.js";
 import BaseService from "./base.service.js";
 import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
+import { Product } from "../models/product.js";
 
 class DeveloperService extends BaseService {
   constructor() {

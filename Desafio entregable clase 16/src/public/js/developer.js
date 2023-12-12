@@ -2,20 +2,40 @@ let developerID = document.getElementById("developerId");
 developerID = +developerID.innerText.replace("ID developer: ", "");
 const developerHero = document.getElementById("developerHero");
 const developerProducts = document.getElementById("developerProducts");
-const developerConfiguration = document.getElementById("developerConfiguration");
+const developerConfiguration = document.getElementById(
+  "developerConfiguration"
+);
 const authUser = Cookies.get("token") || Cookies.get("user");
-const userInformation = Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null;
+const userInformation = Cookies.get("user")
+  ? JSON.parse(Cookies.get("user"))
+  : null;
 const developerImg = document.getElementById("developerImg");
 const updateDeveloperPhoto = document.getElementById("updateDeveloperPhoto");
 const updateDeveloperForm = document.getElementById("updateDeveloperForm");
 const updateDeveloperName = document.getElementById("updateDeveloperName");
 
-
 if (authUser && userInformation && userInformation.role === "ADMIN") {
-    developerConfiguration.style = "display:contents;";
+  developerConfiguration.style = "display:contents;";
 } else {
-    developerConfiguration.style = "display:none;";
+  developerConfiguration.style = "display:none;";
 }
+
+updateDeveloperForm.onsubmit = async (e) => {
+  try {
+    e.preventDefault();
+    const newData = {
+      developer_name: updateDeveloperName.value,
+    };
+
+    if (!newData.developer_name) {
+      throw new Error(`Form incomplete`);
+    }
+
+    await updateDeveloper(newData);
+  } catch (error) {
+    alert(error);
+  }
+};
 
 async function getDeveloper() {
   try {
@@ -58,7 +78,7 @@ updateDeveloperPhoto.onchange = (e) => {
 
       newUserInfo.append("image", file);
 
-      productImg.src = e.target.result;
+      developerImg.src = e.target.result;
 
       await updateDeveloper(newUserInfo);
     };
@@ -96,58 +116,56 @@ async function updateDeveloper(newData) {
 }
 
 async function compileDeveloper(developer) {
-    console.log(developer);
+  console.log(developer);
   updateDeveloperName.value = developer.developer_name;
 
-  
   developerImg.src = developer.url_logo_developer;
   const developerHeroTemplate = `
-  <img src="${developer.url_logo_developer}"/>
   <p class="text-5xl primary-font leading-normal">${developer.developer_name}</p>
-  `
+  <img src="${developer.url_logo_developer}"/>
+
+  <p class="text-3xl primary-font leading-normal">Catalogue:</p>
+  `;
 
   developerHero.innerHTML = developerHeroTemplate;
+
+  const productsTemplate = developer.products.map(
+    (product) => `
+      <a href="http://localhost:8080/products/${product.id}">
+      <div class="flex flex-col justify-center items-center relative" style="width:200px;height:350px;" >
+      <div style="width:50px;height:50px;display:${
+        +product.discount ? "flex" : "none"
+      }" class="absolute bottom-[60px] right-[-10px] rounded-full bg-orange-600 items-center justify-center ">
+        <p class="text-md text-white secondary-font mb-1">-${
+          product.discount
+        }%</p> 
+      </div>
+      <img src="${
+        product.url_front_page
+      }" style="width:200px;height:270px;" class="rounded-t-lg"/>
+      <div class="rounded-b-lg bg-white p-2 flex flex-col justify-center items-center" style="width:200px;height:80px;">
+      <p class="text-center primary-font">${product.title}</p>
+      <span class="w-full flex gap-x-2 items-center justify-center">
+      <p class="${
+        product.discount
+          ? "line-through text-slate-500 text-sm secondary-font"
+          : "text-sm secondary-font"
+      }">${product.price} USD</p>
+      <p class="text-sm secondary-font">${
+        product.discount
+          ? (+product.price * (1 - +product.discount / 100)).toFixed(2) + " USD"
+          : ""
+      }</p>
+      </span>
+      </div>
+      <div/>
+      </a>
+      `
+  );
+
+  productsTemplate.forEach((template) => {
+    developerProducts.innerHTML = developerProducts.innerHTML + template;
+  });
 }
 
 getDeveloper();
-// getCartOfUser();
-// function validateProduct(product) {
-//   if (
-//     !product.title ||
-//     !product.description ||
-//     !product.price ||
-//     !product.release_date ||
-//     !product.developerId ||
-//     !product.CPU ||
-//     !product.RAM ||
-//     !product.memory ||
-//     !product.GPU
-//   ) {
-//     throw new Error("Form incomplete");
-//   }
-// }
-
-// updateProductForm.onsubmit = async (e) => {
-//   try {
-//     e.preventDefault();
-//     const product = {
-//       title: document.getElementById("updateProductTitle").value,
-//       description: document.getElementById("updateProductDescription").value,
-//       price: document.getElementById("updateProductPrice").value,
-//       discount: document.getElementById("updateProductDiscount").value,
-//       release_date: document.getElementById("updateProductReleaseDate").value,
-//       trailer_video: document.getElementById("updateProductVideo").value,
-//       developerId: document.getElementById("updateProductIdDeveloper").value,
-//       CPU: document.getElementById("updateProductCPU").value,
-//       RAM: document.getElementById("updateProductRAM").value,
-//       memory: document.getElementById("updateProductMemory").value,
-//       GPU: document.getElementById("updateProductGPU").value,
-//     };
-
-//     validateProduct(product);
-
-//     await updateProduct(product);
-//   } catch (error) {
-//     alert(error);
-//   }
-// };
