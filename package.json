@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@faker-js/faker": "^8.3.1",
     "cross-env": "^7.0.3",
     "mongoose-aggregate-paginate-v2": "^1.0.6"
   },
