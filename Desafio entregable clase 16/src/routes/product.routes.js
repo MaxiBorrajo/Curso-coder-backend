@@ -5,7 +5,7 @@ import {
   deleteProductById,
   getProductById,
   getProducts,
-  updateProductById
+  updateProductById,
 } from "../controllers/product.controller.js";
 
 import {
@@ -21,10 +21,20 @@ import {
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 import isAdmin from "../middlewares/checkRole.middleware.js";
+import { generateProduct } from "../mocks/product.mock.js";
+import { customResponse } from "../utils.js";
 
 const router = express.Router();
 
 router.get("/", getProducts); //route:✓ anda:✓
+
+router.get("/mockingproducts", (req, res, next) => {
+  let products = [];
+  for (let i = 0; i < 100; i++) {
+    products.push(generateProduct());
+  }
+  return customResponse(res, 200, products);
+});
 
 router.get("/:pid", getProductById); //route:✓ anda:✓
 
@@ -47,7 +57,8 @@ router.post(
   addProduct
 );
 
-router.put(// anda:✓
+router.put(
+  // anda:✓
   "/:pid",
   isAuthenticated,
   isAdmin,
@@ -62,5 +73,6 @@ router.put(// anda:✓
 ); //route:✓
 
 router.delete("/:pid", isAuthenticated, isAdmin, deleteProductById); //route:✓ anda:✓
+
 
 export default router;
