@@ -35,18 +35,6 @@ class ProductDao extends BaseDao {
           ],
         };
 
-      case "developer":
-        return {
-          include: [
-            {
-              model: Developer,
-              where: {
-                id: +filterValue,
-              },
-            },
-          ],
-        };
-
       case "price":
         filterValue = JSON.parse(filterValue);
         return {
