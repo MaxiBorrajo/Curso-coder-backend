@@ -1,5 +1,5 @@
 import userService from "../services/User.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 
 async function deleteCurrentUser(req, res, next) {
   //controller:✓

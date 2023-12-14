@@ -7,11 +7,11 @@ import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
 
 import {
   generateToken,
-  CustomError,
   matchPasswords,
   createUniqueToken,
   sendEmail,
-} from "../utils.js";
+} from "../utils/utils.js";
+import { errors } from "../utils/errorDictionary.js";
 
 class UserService extends BaseService {
   constructor() {
@@ -27,7 +27,7 @@ class UserService extends BaseService {
       });
 
       if (foundUser) {
-        throw new CustomError(400, "User already exists");
+        throw new errors.USER_ALREADY_EXISTS();
       }
 
       const createdUser = await super.create(object);
@@ -77,7 +77,11 @@ class UserService extends BaseService {
         !foundUser ||
         !(await matchPasswords(object.password, foundUser.password))
       ) {
-        throw new CustomError(401, "Email or password are wrong");
+        throw new errors.EMAIL_OR_PASSWORD_WRONG();
+      }
+
+      if (foundUser.oauthuser) {
+        throw new errors.BAD_LOGIN_METHOD();
       }
 
       const userDto = new UserDto(
@@ -109,7 +113,7 @@ class UserService extends BaseService {
       });
 
       if (!foundUser || foundUser.oauthuser) {
-        throw new CustomError(400, "User not found");
+        throw new errors.USER_NOT_FOUND();
       }
 
       const resetPasswordToken = createUniqueToken();
@@ -155,13 +159,13 @@ class UserService extends BaseService {
       });
 
       if (!foundToken) {
-        throw new CustomError(401, "Invalid reset password token");
+        throw new errors.INVALID_RESET_PASSWORD_TOKEN();
       }
 
       if (new Date() > foundToken.resetPasswordTokenExpiration) {
         await foundToken.destroy();
 
-        throw new CustomError(401, "Token expired");
+        throw new errors.RESET_PASSWORD_TOKEN_EXPIRED();
       }
 
       await this.updateById(foundToken.userId, { password: newPassword });

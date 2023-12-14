@@ -1,5 +1,5 @@
 import ratingService from "../services/Rating.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 
 async function rate(req, res, next) {
   //controller:✓

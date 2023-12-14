@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 import developerService from "../services/Developer.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 
 async function getDevelopers(req, res, next) {
   //controller:✓

@@ -1,9 +1,9 @@
 import ProductDao from "../dao/DBSystem/Product.dao.js";
 import BaseService from "./base.service.js";
-import { CustomError } from "../utils.js";
 import { deleteImageInCloud } from "../middlewares/uploadImages.middleware.js";
 import { Category } from "../models/category.js";
 import { Developer } from "../models/developer.js";
+import { errors } from "../utils/errorDictionary.js";
 
 class ProductService extends BaseService {
   constructor() {
@@ -41,7 +41,7 @@ class ProductService extends BaseService {
       });
 
       if (!foundObject) {
-        throw new CustomError(400, "Product not found");
+        throw new errors.PRODUCT_NOT_FOUND()
       }
 
       return foundObject;

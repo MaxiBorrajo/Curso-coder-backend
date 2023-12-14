@@ -2,8 +2,8 @@ import productService from "../services/Product.service.js";
 import messageService from "../services/Message.service.js";
 import categoryService from "../services/Category.service.js";
 import developerService from "../services/Developer.service.js";
-import { CustomError } from "../utils.js";
 import { User } from "../models/user.js";
+import { errors } from "../utils/errorDictionary.js";
 
 async function getAllProductsHandler(io, socket) {
   socket.on("getAllProducts", async () => {
@@ -49,7 +49,7 @@ async function messagesHandler(io, socket) {
       });
       io.sockets.emit("newMessages", messages);
     } else {
-      throw new CustomError(401, "Invalid credentials");
+      throw new errors.UNAUTHENTICATED();
     }
   });
 

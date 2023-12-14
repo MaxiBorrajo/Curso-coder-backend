@@ -1,5 +1,5 @@
 import cartService from "../services/Cart.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 import { Product } from "../models/product.js";
 
 async function addProductToCart(req, res, next) {

@@ -1,5 +1,5 @@
 import userService from "../services/User.service.js";
-import { generateToken, customResponse } from "../utils.js";
+import { generateToken, customResponse } from "../utils/utils.js";
 
 async function register(req, res, next) {
   //controller:✓

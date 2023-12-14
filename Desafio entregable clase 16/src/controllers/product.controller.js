@@ -1,5 +1,5 @@
 import productService from "../services/Product.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 
 async function getProducts(req, res, next) {
   //controller:✓

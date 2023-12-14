@@ -3,7 +3,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import userService from "../services/User.service.js";
 import { uploadImageToCloudinary } from "./uploadImages.middleware.js";
 import { UserDto } from "../dto/User.dto.js";
-import { CustomError } from "../utils.js";
+import { errors } from "../utils/errorDictionary.js";
 
 passport.use(
   new GoogleStrategy(
@@ -58,7 +58,7 @@ passport.use(
 
           return done(null, userDto);
         } else {
-          return done(new CustomError(400, "Your registration is not through Google, go to http://localhost:8080/login to log in"));
+          return done(new errors.BAD_LOGIN_METHOD());
         }
       } catch (error) {
         return done(error);

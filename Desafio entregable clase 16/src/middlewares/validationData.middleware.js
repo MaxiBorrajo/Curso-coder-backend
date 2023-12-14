@@ -1,8 +1,7 @@
 import _ from "lodash";
-import { CustomError } from "../utils.js";
+import { errors } from "../utils/errorDictionary.js";
 
 function body_must_not_contain_attributes(attributes_to_exclude) {
-
   return function (req, res, next) {
     try {
       const body_attributes = Object.keys(req.body);
@@ -12,9 +11,7 @@ function body_must_not_contain_attributes(attributes_to_exclude) {
       );
 
       if (found_attribute) {
-        throw new CustomError(400,
-          `The attribute '${found_attribute}' is not allowed`
-        );
+        throw new errors.ATTRIBUTE_NOT_ALLOWED(found_attribute);
       }
 
       return next();
@@ -37,10 +34,7 @@ function body_must_contain_attributes(mustAttributes) {
       if (!_.isEqual(intersectedAttributes.sort(), mustAttributes.sort())) {
         const missingAttributes = _.difference(mustAttributes, bodyAttributes);
 
-        throw new CustomError(
-          400,
-          `The body is missing the following attributes: ${missingAttributes}`
-        );
+        throw new errors.MISSING_ATTRIBUTES(missingAttributes);
       }
 
       return next();
@@ -55,18 +49,13 @@ function meetsWithEmailRequirements(req, res, next) {
     const email = req.body.email;
 
     if (!email) {
-      return res.status(400).json({
-        message: "An 'email' attribute is required",
-      });
+      throw new errors.EMAIL_IS_REQUIRED();
     }
 
     const emailRegularExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegularExpression.test(email)) {
-      throw new CustomError(
-        400,
-        `The value of the 'email' attribute must be a valid email address`
-      );
+      throw new errors.INVALID_EMAIL();
     }
 
     return next();
@@ -80,17 +69,14 @@ function meetsWithPasswordRequirements(req, res, next) {
     const password = req.body.password;
 
     if (!password) {
-      throw new CustomError(400, "A 'password' attribute is required");
+      throw new errors.PASSWORD_IS_REQUIRED();
     }
 
     const passwordRegularExpression =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!passwordRegularExpression.test(password)) {
-      throw new CustomError(
-        400,
-        "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character, and be 8 characters or longer."
-      );
+      throw new errors.INVALID_PASSWORD();
     }
 
     return next();
@@ -103,5 +89,5 @@ export {
   body_must_contain_attributes,
   meetsWithEmailRequirements,
   meetsWithPasswordRequirements,
-  body_must_not_contain_attributes
+  body_must_not_contain_attributes,
 };

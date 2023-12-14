@@ -1,11 +1,12 @@
 import BaseService from "./base.service.js";
 import ProductService from "./product.service.js";
 import CartDao from "../dao/DBSystem/Cart.dao.js";
-import { CustomError, createUniqueToken } from "../utils.js";
+import { createUniqueToken } from "../utils/utils.js";
 import UserService from "./User.service.js";
 import { Op } from "sequelize";
 import { Product } from "../models/product.js";
-import { sendEmail } from "../utils.js";
+import { sendEmail } from "../utils/utils.js";
+import { errors } from "../utils/errorDictionary.js";
 
 class CartService extends BaseService {
   constructor() {
@@ -17,7 +18,7 @@ class CartService extends BaseService {
       const foundUser = await UserService.getById(object.userId);
 
       if (!foundUser) {
-        throw new CustomError(400, "User not found");
+        throw new errors.USER_NOT_FOUND();
       }
 
       object = {
@@ -57,14 +58,11 @@ class CartService extends BaseService {
       const foundProduct = await ProductService.getById(object.productId);
 
       if (foundCart.bought) {
-        throw new CustomError(
-          400,
-          "You cannot add products to a purchased cart"
-        );
+        throw new errors.PRODUCT_CANNOT_ADD_TO_BOUGHT_CART();
       }
 
       if (await foundCart.hasProduct(foundProduct)) {
-        throw new CustomError(400, "Product already added to cart");
+        throw new errors.PRODUCT_ALREADY_ADDED_TO_CART();
       }
 
       await foundCart.addProduct(foundProduct);
@@ -79,14 +77,11 @@ class CartService extends BaseService {
       const foundProduct = await ProductService.getById(productId);
 
       if (foundCart.bought) {
-        throw new CustomError(
-          401,
-          "Products cannot be removed from a purchased cart"
-        );
+        throw new errors.PRODUCT_CANNOT_REMOVE_FROM_BOUGHT_CART();
       }
 
       if (!(await foundCart.hasProduct(foundProduct))) {
-        throw new CustomError(400, "Product doesn't added to cart");
+        throw new errors.PRODUCT_NOT_ADDED_TO_CART();
       }
 
       await foundCart.removeProduct(foundProduct);
@@ -110,15 +105,15 @@ class CartService extends BaseService {
       });
 
       if (!foundObject) {
-        throw new CustomError(400, "Cart not found");
+        throw new errors.CART_NOT_FOUND();
       }
 
       if (foundObject.bought) {
-        throw new CustomError(400, "Cart already bought");
+        throw new errors.CART_ALREADY_BOUGHT();
       }
 
       if (foundObject.products.length === 0) {
-        throw new CustomError(400, "Cart is empty");
+        throw new errors.EMPTY_CART();
       }
 
       foundObject.amount = +foundObject.amount;
@@ -219,7 +214,6 @@ class CartService extends BaseService {
           },
         };
       }
-      console.log(query)
 
       const foundHistory = await this.getAll(query);
 

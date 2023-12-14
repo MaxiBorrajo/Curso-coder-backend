@@ -1,9 +1,8 @@
 import { Product } from "../../models/product.js";
 import BaseDao from "./Base.dao.js";
 import { Category } from "../../models/category.js";
-import { Developer } from "../../models/developer.js";
 import { Op } from "sequelize";
-import { CustomError } from "../../utils.js";
+import { errors } from "../../utils/errorDictionary.js";
 
 class ProductDao extends BaseDao {
   constructor() {
@@ -12,7 +11,7 @@ class ProductDao extends BaseDao {
 
   getSearchCriteria(filter, filterValue) {
     if (filter && !filterValue) {
-      throw new CustomError(400, "A filter value must be provided");
+      throw new errors.FILTER_NOT_PROVIDED();
     }
 
     switch (filter) {

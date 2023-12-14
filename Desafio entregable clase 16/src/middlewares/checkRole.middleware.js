@@ -1,5 +1,3 @@
-import { CustomError } from "../utils.js";
-
 function isAdmin(req, res, next) {
   if (req.user.role === "ADMIN") {
     next();

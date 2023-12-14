@@ -15,7 +15,7 @@ import viewsRoute from "./routes/views.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 import errorHandlerMiddleware from "./middlewares/error.middleware.js";
 import { engine } from "express-handlebars";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/utils.js";
 import { Server } from "socket.io";
 import {
   getAllProductsHandler,

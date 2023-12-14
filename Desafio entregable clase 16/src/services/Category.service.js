@@ -1,5 +1,5 @@
 import CategoryDao from "../dao/DBSystem/Category.dao.js";
-import { CustomError } from "../utils.js";
+import { errors } from "../utils/errorDictionary.js";
 import BaseService from "./base.service.js";
 import ProductService from "./Product.service.js";
 
@@ -14,7 +14,9 @@ class CategoryService extends BaseService {
       const foundProduct = await ProductService.getById(object.productId);
 
       if (await foundCategory.hasProduct(foundProduct)) {
-        throw new CustomError(400, "Product already belongs to category");
+        throw new errors.PRODUCT_ALREADY_BELONG_CATEGORY(
+          foundCategory.category_name
+        );
       }
 
       await foundCategory.addProduct(foundProduct);
@@ -29,7 +31,9 @@ class CategoryService extends BaseService {
       const foundProduct = await ProductService.getById(productId);
 
       if (!(await foundCategory.hasProduct(foundProduct))) {
-        throw new CustomError(400, "Product doesn't belong to category");
+        throw new errors.PRODUCT_NOT_BELONG_CATEGORY(
+          foundCategory.category_name
+        );
       }
 
       await foundCategory.removeProduct(foundProduct);

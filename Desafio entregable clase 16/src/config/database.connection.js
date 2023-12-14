@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { CustomError } from "../utils.js";
+import { errors } from "../utils/errorDictionary.js";
 
 export class Database {
   static instanceDatabase;
@@ -15,13 +15,10 @@ export class Database {
   static async databaseConnection() {
     try {
       await this.getInstanceDatabase().authenticate();
-      //await this.getInstanceDatabase().sync({alter:true}); 
+      //await this.getInstanceDatabase().sync({alter:true});
       console.log("Succesfully connected to database");
     } catch (error) {
-      throw new CustomError(
-        500,
-        `Connection to database failed, ERROR: ${error.message}`
-      );
+      throw new errors.DATABASE_CONNECTION_FAILED(error.message);
     }
   }
 }

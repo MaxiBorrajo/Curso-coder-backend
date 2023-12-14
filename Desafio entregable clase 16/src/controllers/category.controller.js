@@ -1,5 +1,5 @@
 import categoryService from "../services/Category.service.js";
-import { customResponse } from "../utils.js";
+import { customResponse } from "../utils/utils.js";
 import { Op } from "sequelize";
 
 async function getCategories(req, res, next) {
