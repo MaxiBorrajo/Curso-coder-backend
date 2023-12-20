@@ -190,7 +190,6 @@ async function compileProduct(product) {
   updateProductMemory.value = +product.memory;
   updateProductGPU.value = product.GPU;
 
-  console.log(product);
   productImg.src = product.url_front_page;
   const productHeroTemplate = `
   <div class="relative h-fit">

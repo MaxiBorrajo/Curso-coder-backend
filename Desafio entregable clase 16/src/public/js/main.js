@@ -80,9 +80,8 @@ if (authenticated) {
 searchBar.onkeyup = (e) => {
   e.preventDefault();
   if (e.keyCode === 13 && searchBar.value) {
-    window.location(
-      `http://localhost:8080/products?keyword=${searchBar.value}`
-    );
+    location.href = `http://localhost:8080/products?filter=keyword&filterValue=${searchBar.value}&page=1`
+    ;
   }
 };
 

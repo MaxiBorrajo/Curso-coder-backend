@@ -65,6 +65,13 @@ class CartService extends BaseService {
         throw new errors.PRODUCT_ALREADY_ADDED_TO_CART();
       }
 
+      foundCart.amount = +foundCart.amount;
+
+      foundCart.amount =
+        +foundProduct.price * (1 - +foundProduct.discount / 100);
+
+      await foundCart.save();
+
       await foundCart.addProduct(foundProduct);
     } catch (error) {
       throw error;
@@ -116,7 +123,7 @@ class CartService extends BaseService {
         throw new errors.EMPTY_CART();
       }
 
-      foundObject.amount = +foundObject.amount;
+      foundObject.amount = 0;
 
       for (const product of foundObject.products) {
         foundObject.amount += +product.price * (1 - +product.discount / 100);
@@ -227,6 +234,7 @@ class CartService extends BaseService {
     try {
       const foundCart = await this.getById(+cartID);
       const foundProduct = await ProductService.getById(+productId);
+
       const result = await foundCart.hasProduct(foundProduct);
       return result;
     } catch (error) {

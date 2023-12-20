@@ -2,25 +2,31 @@ const productOfCart = document.getElementById("productOfCart");
 const totalAmount = document.getElementById("totalAmount");
 let cartID = document.getElementById("cartId");
 cartID = +cartID.innerText.replace("ID cart: ", "");
+const buyButton = document.getElementById("buyButton");
 
 async function deleteProductFromCart(idProduct) {
   try {
     if (Cookies.get("token")) {
-      await axios.delete(`http://localhost:8080/api/carts/${cartID}/product/${idProduct}`, {
-        headers: {
-          Authorization: Cookies.get("token"),
-        },
-      });
+      await axios.delete(
+        `http://localhost:8080/api/carts/${cartID}/product/${idProduct}`,
+        {
+          headers: {
+            Authorization: Cookies.get("token"),
+          },
+        }
+      );
     } else {
-      await axios.delete(`http://localhost:8080/api/carts/${cartID}/product/${idProduct}`);
+      await axios.delete(
+        `http://localhost:8080/api/carts/${cartID}/product/${idProduct}`
+      );
     }
 
     window.location.reload();
-  } catch (error) {
-    if(err.response){
+  } catch (err) {
+    if (err.response) {
       alert(`${err.response.data.Error}`);
-    }else{
-      alert(err)
+    } else {
+      alert(err);
     }
   }
 }
@@ -28,7 +34,7 @@ async function deleteProductFromCart(idProduct) {
 async function buyCart() {
   try {
     if (Cookies.get("token")) {
-      await axios.get(`http://localhost:8080/api/carts/${cartID}/buy`, {
+      await axios.put(`http://localhost:8080/api/carts/${cartID}/buy`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
@@ -37,12 +43,12 @@ async function buyCart() {
       await axios.get(`http://localhost:8080/api/carts/${cartID}/buy`);
     }
 
-    location.href = "http://localhost:8080"
-  } catch (error) {
-    if(err.response){
+    location.href = "http://localhost:8080";
+  } catch (err) {
+    if (err.response) {
       alert(`${err.response.data.Error}`);
-    }else{
-      alert(err)
+    } else {
+      alert(err);
     }
   }
 }
@@ -101,6 +107,12 @@ async function getCartById() {
       });
     } else {
       response = await axios.get(`http://localhost:8080/api/carts/${cartID}`);
+    }
+
+    if (response.data.message.bought) {
+      buyButton.disabled = true;
+      buyButton.className =
+        "w-full px-3 py-2 bg-gray-600 secondary-font text-white rounded-md text-sm";
     }
 
     compileProducts(response.data.message.products);

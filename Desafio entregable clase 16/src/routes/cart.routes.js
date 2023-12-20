@@ -31,7 +31,7 @@ router.get("/history", isAuthenticated, getHistoryBuysOfCurrentUser);//route:✓
 
 router.get("/:cid", isAuthenticated, getCartById);//route:✓ anda:✓
 
-router.get("/:cid/buy", isAuthenticated, buyCart);//route:✓ anda:✓ incluir enviar mail ticket o algo asi
+router.put("/:cid/buy", isAuthenticated, buyCart);//route:✓ anda:✓ incluir enviar mail ticket o algo asi
 
 router.get("/:cid/product/:pid", isAuthenticated, productAddedToCart);
 

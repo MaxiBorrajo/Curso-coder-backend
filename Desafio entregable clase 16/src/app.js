@@ -15,7 +15,6 @@ import viewsRoute from "./routes/views.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 import errorHandlerMiddleware from "./middlewares/error.middleware.js";
 import { engine } from "express-handlebars";
-import { __dirname } from "./utils/utils.js";
 import { Server } from "socket.io";
 import {
   getAllProductsHandler,
@@ -26,10 +25,11 @@ import {
 } from "./handlers/handlers.js";
 import { Database } from "./config/database.connection.js";
 import passport from "passport";
-
+import { dirname } from "path";
+import { fileURLToPath } from "url"; 
 //Variables
 const app = express();
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 //Configuration
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -1,11 +1,8 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function matchPasswords(passwordToCompare, originalPassword) {
   const result = await bcrypt.compare(passwordToCompare, originalPassword);
@@ -46,7 +43,6 @@ async function sendEmail(options) {
 }
 
 export {
-  __dirname,
   generateToken,
   customResponse,
   matchPasswords,
