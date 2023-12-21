@@ -1,5 +1,6 @@
 import ratingService from "../services/Rating.service.js";
 import { customResponse } from "../utils/utils.js";
+import logger from "../winston.config.js";
 
 async function rate(req, res, next) {
   //controller:✓
@@ -22,9 +23,11 @@ async function getRatingOfCurrentUser(req, res, next) {
     const uid = req.user.id;
 
     const result = await ratingService.getByFilter({
-      userId: uid,
+      where:{
+        userId: uid,
+      }
     });
-
+    
     return customResponse(res, 200, result);
   } catch (error) {
     next(error);

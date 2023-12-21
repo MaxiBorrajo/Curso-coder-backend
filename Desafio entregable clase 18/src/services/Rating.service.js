@@ -1,6 +1,7 @@
 import BaseService from "./base.service.js";
 import RatingDao from "../dao/DBSystem/Rating.dao.js";
 import { Op } from "sequelize";
+import { User } from "../models/user.js";
 
 class RatingService extends BaseService {
   constructor() {
@@ -10,7 +11,9 @@ class RatingService extends BaseService {
   async create(object) {
     try {
       let rating = await this.getByFilter({
-        userId: object.userId,
+        where: {
+          userId: object.userId,
+        },
       });
 
       if (rating) {
@@ -37,6 +40,7 @@ class RatingService extends BaseService {
           },
         },
         limit: 10,
+        include: [{ model: User }],
       });
 
       return result;

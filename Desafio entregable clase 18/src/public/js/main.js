@@ -80,21 +80,35 @@ if (authenticated) {
 searchBar.onkeyup = (e) => {
   e.preventDefault();
   if (e.keyCode === 13 && searchBar.value) {
-    location.href = `http://localhost:8080/products?filter=keyword&filterValue=${searchBar.value}&page=1`
-    ;
+    location.href = `http://localhost:8080/products?filter=keyword&filterValue=${searchBar.value}&page=1`;
   }
 };
 
-function myFunction() {
+function myFunction(bought) {
   var x = document.getElementById("snackbar");
-  x.className = "show";
+  x.innerHTML = `
+  <img src="${
+    bought.product.url_front_page
+  }" style="width:70px; height:100px" class="rounded-md"/>
+  <span class="flex flex-col gap-y-3">
+  <p class="primary-font text-sm"><span>${
+    bought.fullname
+  }</span> bought a new product</p>
+<p class="secondary-font text-xs">${bought.product.title}</p>
+<p class="secondary-font text-xs"><b>Total: </b>${
+    bought.product.price * (1 - bought.product.discount / 100)
+  } USD</p>
+</span>
+  `;
+  x.className =
+    "show flex gap-x-3 border-2 border-solid border-indigo-500 bg-indigo-50 p-4 rounded-md";
   setTimeout(function () {
     x.className = x.className.replace("show", "");
-  }, 3000);
+  }, 5000);
 }
 
 socketClient.on("newBought", (bought) => {
-  myFunction();
+  myFunction(bought);
 });
 
 async function logout() {
@@ -103,12 +117,17 @@ async function logout() {
 
     Cookies.remove("token");
     Cookies.remove("user");
+    Cookies.remove("cartId");
 
-    await axios.delete("http://localhost:8080/api/sessions/", {
-      headers: {
-        Authorization: token,
-      },
-    });
+    if (token) {
+      await axios.delete("http://localhost:8080/api/sessions/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+    } else {
+      await axios.delete("http://localhost:8080/api/sessions/");
+    }
 
     location.href = "http://localhost:8080/login";
   } catch (err) {

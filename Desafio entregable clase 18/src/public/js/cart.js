@@ -1,8 +1,10 @@
+const socketclient = io();
 const productOfCart = document.getElementById("productOfCart");
 const totalAmount = document.getElementById("totalAmount");
 let cartID = document.getElementById("cartId");
 cartID = +cartID.innerText.replace("ID cart: ", "");
 const buyButton = document.getElementById("buyButton");
+let _products;
 
 async function deleteProductFromCart(idProduct) {
   try {
@@ -21,7 +23,7 @@ async function deleteProductFromCart(idProduct) {
       );
     }
 
-    window.location.reload();
+    location.reload();
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);
@@ -40,8 +42,16 @@ async function buyCart() {
         },
       });
     } else {
-      await axios.get(`http://localhost:8080/api/carts/${cartID}/buy`);
+      await axios.put(`http://localhost:8080/api/carts/${cartID}/buy`);
     }
+
+    let randomNumber = Math.round(Math.random() * (_products.length - 1));
+
+    socketclient.emit(
+      "productBuy",
+      JSON.parse(Cookies.get("user")),
+      _products[randomNumber]
+    );
 
     location.href = "http://localhost:8080";
   } catch (err) {
@@ -54,6 +64,7 @@ async function buyCart() {
 }
 
 function compileProducts(products) {
+  _products = products;
   let finalPrice = 0;
   for (let product of products) {
     finalPrice += +product.price * (1 - +product.discount / 100);
