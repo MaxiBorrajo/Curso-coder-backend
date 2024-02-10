@@ -26,7 +26,9 @@ async function getProducts(url, template) {
 function compileProducts(products, template) {
   const productsTemplate = products.map(
     (product) => `
-      <a href="https://curso-coder-backend-production.up.railway.app/products/${product.id}">
+      <a href="https://curso-coder-backend-production.up.railway.app/products/${
+        product.id
+      }">
       <div class="flex flex-col justify-center items-center relative" style="width:200px;height:350px;" >
       <div style="width:50px;height:50px;display:${
         +product.discount ? "flex" : "none"
@@ -73,7 +75,20 @@ getProducts(
   discounts
 );
 
+const currentDate = new Date();
+const startDate = new Date();
+startDate.setDate(currentDate.getDate() - 7);
+
+const formatDate = (date) => {
+  return `${date.toLocaleString("en-us", {
+    month: "long",
+  })} ${date.getDate()}, ${date.getFullYear()}`;
+};
+
+const formattedStartDate = formatDate(startDate);
+const formattedEndDate = formatDate(currentDate);
+
 getProducts(
-  'https://curso-coder-backend-production.up.railway.app/api/products?sort=popularity&order=DESC&limit=5&filter=popularity&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
+  `https://curso-coder-backend-production.up.railway.app/api/products?sort=popularity&order=DESC&limit=5&filter=popularity&filterValue={"endDate":"${formattedEndDate}", "startDate":"${formattedStartDate}"}`,
   populars
 );

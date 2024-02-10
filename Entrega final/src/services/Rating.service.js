@@ -34,9 +34,15 @@ class RatingService extends BaseService {
 
       const result = await this.getAll({
         where: {
-          createdAt: {
-            [Op.lt]: actualDate,
-            [Op.gt]: lastWeek,
+          [Op.or]: {
+            createdAt: {
+              [Op.lt]: actualDate,
+              [Op.gt]: lastWeek,
+            },
+            updatedAt: {
+              [Op.lt]: actualDate,
+              [Op.gt]: lastWeek,
+            },
           },
         },
         limit: 10,
