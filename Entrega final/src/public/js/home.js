@@ -65,16 +65,6 @@ function compileProducts(products, template) {
   });
 }
 
-getProducts(
-  'https://curso-coder-backend-production.up.railway.app/api/products?sort=createdAt&order=DESC&limit=5&filter=recent&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
-  added
-);
-
-getProducts(
-  "https://curso-coder-backend-production.up.railway.app/api/products?sort=discount&order=DESC&limit=5",
-  discounts
-);
-
 const currentDate = new Date();
 const startDate = new Date();
 startDate.setDate(currentDate.getDate() - 7);
@@ -87,6 +77,16 @@ const formatDate = (date) => {
 
 const formattedStartDate = formatDate(startDate);
 const formattedEndDate = formatDate(currentDate);
+
+getProducts(
+  `https://curso-coder-backend-production.up.railway.app/api/products?sort=createdAt&order=DESC&limit=5&filter=recent&filterValue={"endDate":"${formattedEndDate}", "startDate":"${formattedStartDate}"}`,
+  added
+);
+
+getProducts(
+  "https://curso-coder-backend-production.up.railway.app/api/products?sort=discount&order=DESC&limit=5",
+  discounts
+);
 
 getProducts(
   `https://curso-coder-backend-production.up.railway.app/api/products?sort=popularity&order=DESC&limit=5&filter=popularity&filterValue={"endDate":"${formattedEndDate}", "startDate":"${formattedStartDate}"}`,
