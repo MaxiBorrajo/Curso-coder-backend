@@ -18,13 +18,13 @@ async function getRatingOfCurrentUser() {
     let response;
 
     if (Cookies.get("token")) {
-      response = await axios.get(`http://localhost:8080/api/ratings`, {
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/ratings`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      response = await axios.get(`http://localhost:8080/api/ratings`);
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/ratings`);
     }
 
     if (response.data.message) {
@@ -52,13 +52,13 @@ getRatingOfCurrentUser();
 async function rate(info) {
   try {
     if (Cookies.get("token")) {
-      await axios.post(`http://localhost:8080/api/ratings`, info, {
+      await axios.post(`https://curso-coder-backend-production.up.railway.app/api/ratings`, info, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.post(`http://localhost:8080/api/ratings`, info);
+      await axios.post(`https://curso-coder-backend-production.up.railway.app/api/ratings`, info);
     }
 
     location.reload();
@@ -190,13 +190,13 @@ async function getRecentRatings() {
     let response;
 
     if (Cookies.get("token")) {
-      response = await axios.get(`http://localhost:8080/api/ratings/recent`, {
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/ratings/recent`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      response = await axios.get(`http://localhost:8080/api/ratings/recent`);
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/ratings/recent`);
     }
 
     compileRatings(response.data.message);

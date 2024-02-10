@@ -5,7 +5,7 @@ let orderBy = urlParams.get("order");
 let sortBy = urlParams.get("sort");
 let filter = urlParams.get("filter");
 let filterValue = urlParams.get("filterValue");
-let hrefProducts = `http://localhost:8080/products?page=${page}`;
+let hrefProducts = `https://curso-coder-backend-production.up.railway.app/products?page=${page}`;
 const order = document.getElementById("order");
 const minPrice = document.getElementById("minPrice");
 const maxPrice = document.getElementById("maxPrice");
@@ -18,7 +18,7 @@ const pagination = document.getElementById("pagination");
 const resetFilters = document.getElementById("resetFilters");
 
 function updateHrefProducts() {
-  hrefProducts = `http://localhost:8080/products?page=${page}`;
+  hrefProducts = `https://curso-coder-backend-production.up.railway.app/products?page=${page}`;
 
   if (orderBy && sortBy) {
     hrefProducts = hrefProducts + `&sort=${sortBy}&order=${orderBy}`;
@@ -50,7 +50,7 @@ async function getProducts() {
   order.value = orderParams;
 
   try {
-    let url = `http://localhost:8080/api/products?`;
+    let url = `https://curso-coder-backend-production.up.railway.app/api/products?`;
 
     if (!urlParams.get("limit")) {
       url = url + "limit=12&";
@@ -102,7 +102,7 @@ async function getProducts() {
 
 async function getCategories() {
   try {
-    const response = await axios.get("http://localhost:8080/api/categories");
+    const response = await axios.get("https://curso-coder-backend-production.up.railway.app/api/categories");
 
     categorySelect.innerHTML = `
       <option value="">None</option>
@@ -128,7 +128,7 @@ async function compileProducts(products) {
   if (products.length > 0) {
     const productsTemplate = products.map(
       (product) => `
-        <a href="http://localhost:8080/products/${
+        <a href="https://curso-coder-backend-production.up.railway.app/products/${
           product.id
         }" class="w-fit h-fit"
         >
@@ -361,5 +361,5 @@ function compilePagination(prevLink, nextLink, totalPages) {
 resetFilters.onclick = (e) => {
   e.preventDefault();
 
-  location.href = "http://localhost:8080/products?page=1";
+  location.href = "https://curso-coder-backend-production.up.railway.app/products?page=1";
 };

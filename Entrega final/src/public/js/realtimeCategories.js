@@ -12,13 +12,13 @@ async function createCategory(newData) {
     }
 
     if (Cookies.get("token")) {
-      await axios.post("http://localhost:8080/api/categories/", newData, {
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/categories/", newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.post("http://localhost:8080/api/categories/", newData);
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/categories/", newData);
     }
 
     socketClientAdmin.emit("getAllCategories");
@@ -42,13 +42,13 @@ async function deleteCategory(id) {
     }
 
     if (Cookies.get("token")) {
-      await axios.delete(`http://localhost:8080/api/categories/${id}`, {
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/categories/${id}`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.delete(`http://localhost:8080/api/categories/${id}`);
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/categories/${id}`);
     }
 
     socketClientAdmin.emit("getAllCategories");
@@ -72,13 +72,13 @@ async function updateCategory(id, newData) {
     }
 
     if (Cookies.get("token")) {
-      await axios.put(`http://localhost:8080/api/categories/${id}`, newData, {
+      await axios.put(`https://curso-coder-backend-production.up.railway.app/api/categories/${id}`, newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.put(`http://localhost:8080/api/categories/${id}`, newData);
+      await axios.put(`https://curso-coder-backend-production.up.railway.app/api/categories/${id}`, newData);
     }
 
     socketClientAdmin.emit("getAllCategories");
@@ -104,7 +104,7 @@ socketClientAdmin.emit("getAllCategories");
 function compileCategories(categories) {
   const categoriesTemplate = categories.map(
     (category) => `
-      <a href="http://localhost:8080/products?filter=category&filterValue=${category.id}" class="h-fit">
+      <a href="https://curso-coder-backend-production.up.railway.app/products?filter=category&filterValue=${category.id}" class="h-fit">
       <div class="p-2 flex items-center gap-x-3 border border-solid border-indigo-500 bg-indigo-50">
       <p class="text-sm secondary-font">ID: ${category.id}</p>
       <p class="text-sm secondary-font">${category.category_name}</p>

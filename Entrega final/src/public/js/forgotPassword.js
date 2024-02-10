@@ -20,7 +20,7 @@ async function forgotPassword(email) {
     validateForgotPasswordForm(email);
 
     const result = await axios.post(
-      "http://localhost:8080/api/users/forgotPassword",
+      "https://curso-coder-backend-production.up.railway.app/api/users/forgotPassword",
       email
     );
 

@@ -5,7 +5,7 @@ function compileDevelopers(_developers) {
     developers.innerHTML =
       developers.innerHTML +
       `
-            <a href="http://localhost:8080/developers/${developer.id}">
+            <a href="https://curso-coder-backend-production.up.railway.app/developers/${developer.id}">
         <div class="p-3 flex items-center gap-x-3 border border-solid border-indigo-500 bg-indigo-50 rounded-md">
         <img src="${developer.url_logo_developer}" style="width:100px;height:60px;"/>
         <p class="text-xl secondary-font">${developer.developer_name}</p>
@@ -18,7 +18,7 @@ function compileDevelopers(_developers) {
 
 async function getDevelopers() {
   try {
-    const response = await axios.get("http://localhost:8080/api/developers");
+    const response = await axios.get("https://curso-coder-backend-production.up.railway.app/api/developers");
 
     console.log(response)
 

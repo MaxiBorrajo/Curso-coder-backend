@@ -22,7 +22,7 @@ async function register(newUser) {
     validateUserForm(newUser);
 
     const result = await axios.post(
-      "http://localhost:8080/api/sessions/register",
+      "https://curso-coder-backend-production.up.railway.app/api/sessions/register",
       newUser
     );
 
@@ -30,7 +30,7 @@ async function register(newUser) {
     Cookies.set("user", JSON.stringify(result.data.message.user), {
       expires: 7,
     });
-    location.href = "http://localhost:8080/";
+    location.href = "https://curso-coder-backend-production.up.railway.app/";
   } catch (err) {
     if(err.response){
       alert(`${err.response.data.Error}`);

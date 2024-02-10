@@ -20,7 +20,7 @@ async function login(user) {
     validateUserForm(user);
 
     const result = await axios.post(
-      "http://localhost:8080/api/sessions/login",
+      "https://curso-coder-backend-production.up.railway.app/api/sessions/login",
       user
     );
 
@@ -28,7 +28,7 @@ async function login(user) {
     Cookies.set("user", JSON.stringify(result.data.message.user), {
       expires: 7,
     });
-    location.href = "http://localhost:8080/";
+    location.href = "https://curso-coder-backend-production.up.railway.app/";
   } catch (err) {
     if(err.response){
       alert(`${err.response.data.Error}`);

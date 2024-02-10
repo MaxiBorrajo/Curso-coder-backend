@@ -94,10 +94,10 @@ class UserService extends BaseService {
       );
 
       users.prevLink =
-        page > 1 ? `http://localhost:8080/api/users?page=${+page - 1}` : null;
+        page > 1 ? process.env.URL_FRONTEND + `/api/users?page=${+page - 1}` : null;
       users.nextLink =
         page < users.count / limit
-          ? `http://localhost:8080/api/users?page=${+page + 1}`
+          ? process.env.URL_FRONTEND + `/api/users?page=${+page + 1}`
           : null;
 
       users.prevLink =

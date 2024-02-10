@@ -10,7 +10,7 @@ async function deleteProductFromCart(idProduct) {
   try {
     if (Cookies.get("token")) {
       await axios.delete(
-        `http://localhost:8080/api/carts/${cartID}/product/${idProduct}`,
+        `https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}/product/${idProduct}`,
         {
           headers: {
             Authorization: Cookies.get("token"),
@@ -19,7 +19,7 @@ async function deleteProductFromCart(idProduct) {
       );
     } else {
       await axios.delete(
-        `http://localhost:8080/api/carts/${cartID}/product/${idProduct}`
+        `https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}/product/${idProduct}`
       );
     }
 
@@ -36,13 +36,13 @@ async function deleteProductFromCart(idProduct) {
 async function buyCart() {
   try {
     if (Cookies.get("token")) {
-      await axios.put(`http://localhost:8080/api/carts/${cartID}/buy`, {
+      await axios.put(`https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}/buy`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.put(`http://localhost:8080/api/carts/${cartID}/buy`);
+      await axios.put(`https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}/buy`);
     }
 
     let randomNumber = Math.round(Math.random() * (_products.length - 1));
@@ -53,7 +53,7 @@ async function buyCart() {
       _products[randomNumber]
     );
 
-    location.href = "http://localhost:8080";
+    location.href = "https://curso-coder-backend-production.up.railway.app";
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);
@@ -76,7 +76,7 @@ function compileProducts(products) {
     const productsTemplate = products.map(
       (product) => `
         <div class="rounded-md p-5 flex items-center gap-x-3 border-2 border-solid border-indigo-500 bg-indigo-50">
-        <a href="http://localhost:8080/products/${product.id}">
+        <a href="https://curso-coder-backend-production.up.railway.app/products/${product.id}">
         <img src="${
           product.url_front_page
         }" class="rounded-md" style="width:80px;height:120px;"/>
@@ -111,13 +111,13 @@ async function getCartById() {
     let response;
 
     if (Cookies.get("token")) {
-      response = await axios.get(`http://localhost:8080/api/carts/${cartID}`, {
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      response = await axios.get(`http://localhost:8080/api/carts/${cartID}`);
+      response = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/carts/${cartID}`);
     }
 
     if (response.data.message.bought) {

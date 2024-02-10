@@ -9,13 +9,13 @@ async function createProduct(newData) {
     validateProduct(newData);
 
     if (Cookies.get("token")) {
-      await axios.post("http://localhost:8080/api/products/", newData, {
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/products/", newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.post("http://localhost:8080/api/products/", newData);
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/products/", newData);
     }
 
     socketClientAdmin.emit("getAllProducts");
@@ -39,13 +39,13 @@ async function deleteProduct(id) {
     }
 
     if (Cookies.get("token")) {
-      await axios.delete(`http://localhost:8080/api/products/${id}`, {
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/products/${id}`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.delete(`http://localhost:8080/api/products/${id}`);
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/products/${id}`);
     }
 
     socketClientAdmin.emit("getAllProducts");
@@ -71,7 +71,7 @@ socketClientAdmin.emit("getAllProducts");
 function compileProducts(products) {
   const productsTemplate = products.map(
     (product) => `
-      <a href="http://localhost:8080/products/${product.id}" class="w-full">
+      <a href="https://curso-coder-backend-production.up.railway.app/products/${product.id}" class="w-full">
       <div class="p-2 flex items-center gap-x-3 border border-solid border-indigo-500 bg-indigo-50">
       <p class="text-sm secondary-font">ID: ${product.id}</p>
       <p class="text-sm secondary-font">Title: ${product.title}</p>

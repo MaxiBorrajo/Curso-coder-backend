@@ -70,11 +70,11 @@ class ProductService extends BaseService {
 
       products.prevLink =
         page > 1
-          ? `http://localhost:8080/api/products?page=${+page - 1}`
+          ? process.env.URL_FRONTEND + `/api/products?page=${+page - 1}`
           : null;
       products.nextLink =
         page < products.count / limit
-          ? `http://localhost:8080/api/products?page=${+page + 1}`
+          ? process.env.URL_FRONTEND + `/api/products?page=${+page + 1}`
           : null;
 
       products.prevLink =

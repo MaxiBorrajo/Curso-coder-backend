@@ -32,16 +32,15 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
 
-    failureRedirect: "http://localhost:8080/login",
+    failureRedirect: process.env.URL_FRONTEND +"/login",
   })
   ,(req, res, next)=>{
     res.cookie("user", JSON.stringify(req.user))
-    res.redirect("http://localhost:8080")
+    res.redirect(process.env.URL_FRONTEND)
   }
 );
 
 router.post(
-  //route:✓ anda:✓
   "/login",
   meetsWithEmailRequirements,
   meetsWithPasswordRequirements,
@@ -49,7 +48,6 @@ router.post(
 );
 
 router.post(
-  //route:✓ anda:✓
   "/register",
   body_must_contain_attributes(["first_name", "last_name"]),
   meetsWithEmailRequirements,
@@ -57,8 +55,8 @@ router.post(
   register
 );
 
-router.delete("/", isAuthenticated, logout); //route:✓
+router.delete("/", isAuthenticated, logout);
 
-router.get("/current", isAuthenticated, getActualUser); //route:✓ anda:✓
+router.get("/current", isAuthenticated, getActualUser);
 
 export default router;

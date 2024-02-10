@@ -40,7 +40,7 @@ async function productAddedToCart() {
     const idCart = Cookies.get("cartId");
     if (Cookies.get("token")) {
       response = await axios.get(
-        `http://localhost:8080/api/carts/${idCart}/product/${productID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/carts/${idCart}/product/${productID}`,
         {
           headers: {
             Authorization: Cookies.get("token"),
@@ -49,7 +49,7 @@ async function productAddedToCart() {
       );
     } else {
       response = await axios.get(
-        `http://localhost:8080/api/carts/${idCart}/product/${productID}`
+        `https://curso-coder-backend-production.up.railway.app/api/carts/${idCart}/product/${productID}`
       );
     }
 
@@ -69,7 +69,7 @@ async function getProduct() {
 
     if (Cookies.get("token")) {
       response = await axios.get(
-        `http://localhost:8080/api/products/${productID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/products/${productID}`,
         {
           headers: {
             Authorization: Cookies.get("token"),
@@ -78,7 +78,7 @@ async function getProduct() {
       );
     } else {
       response = await axios.get(
-        `http://localhost:8080/api/products/${productID}`
+        `https://curso-coder-backend-production.up.railway.app/api/products/${productID}`
       );
     }
 
@@ -116,7 +116,7 @@ async function updateProduct(newData) {
   try {
     if (Cookies.get("token")) {
       await axios.put(
-        `http://localhost:8080/api/products/${productID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/products/${productID}`,
         newData,
         {
           headers: {
@@ -126,7 +126,7 @@ async function updateProduct(newData) {
       );
     } else {
       await axios.put(
-        `http://localhost:8080/api/products/${productID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/products/${productID}`,
         newData
       );
     }
@@ -149,13 +149,13 @@ async function addProductToCart() {
     };
 
     if (Cookies.get("token")) {
-      await axios.post(`http://localhost:8080/api/carts/`, newData, {
+      await axios.post(`https://curso-coder-backend-production.up.railway.app/api/carts/`, newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.post(`http://localhost:8080/api/carts/`, newData);
+      await axios.post(`https://curso-coder-backend-production.up.railway.app/api/carts/`, newData);
     }
 
     window.location.reload();
@@ -235,7 +235,7 @@ ${
 <p class="text-sm secondary-font">Release date: ${new Date(
     product.release_date
   ).toLocaleDateString()} </p>
-<p class="text-sm secondary-font"><a href="http://localhost:8080/developers/${
+<p class="text-sm secondary-font"><a href="https://curso-coder-backend-production.up.railway.app/developers/${
     product.developerId
   }">Developed by: ${product.developer.developer_name}<a/></p>
 <span class="flex flex-col gap-y-3">
@@ -265,7 +265,7 @@ ${
 
   const categoriesTemplate = product.categories.map(
     (category, index) => `
-    <a class="h-fit" href="http://localhost:8080/products?filter=category&filterValue=${
+    <a class="h-fit" href="https://curso-coder-backend-production.up.railway.app/products?filter=category&filterValue=${
       category.id
     }">
     <p class="text-xs

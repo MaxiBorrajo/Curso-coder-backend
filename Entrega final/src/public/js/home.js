@@ -26,7 +26,7 @@ async function getProducts(url, template) {
 function compileProducts(products, template) {
   const productsTemplate = products.map(
     (product) => `
-      <a href="http://localhost:8080/products/${product.id}">
+      <a href="https://curso-coder-backend-production.up.railway.app/products/${product.id}">
       <div class="flex flex-col justify-center items-center relative" style="width:200px;height:350px;" >
       <div style="width:50px;height:50px;display:${
         +product.discount ? "flex" : "none"
@@ -64,16 +64,16 @@ function compileProducts(products, template) {
 }
 
 getProducts(
-  'http://localhost:8080/api/products?sort=createdAt&order=DESC&limit=5&filter=recent&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
+  'https://curso-coder-backend-production.up.railway.app/api/products?sort=createdAt&order=DESC&limit=5&filter=recent&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
   added
 );
 
 getProducts(
-  "http://localhost:8080/api/products?sort=discount&order=DESC&limit=5",
+  "https://curso-coder-backend-production.up.railway.app/api/products?sort=discount&order=DESC&limit=5",
   discounts
 );
 
 getProducts(
-  'http://localhost:8080/api/products?sort=popularity&order=DESC&limit=5&filter=popularity&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
+  'https://curso-coder-backend-production.up.railway.app/api/products?sort=popularity&order=DESC&limit=5&filter=popularity&filterValue={"endDate":"December 9, 2023", "startDate":"December 2, 2023"}',
   populars
 );

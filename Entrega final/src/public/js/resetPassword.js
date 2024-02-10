@@ -1,7 +1,7 @@
 const resetPasswordForm = document.getElementById("resetPasswordForm");
 const back = document.getElementById("back");
 const url = window.location.href;
-const token = url.replace("http://localhost:8080/resetPassword/", "");
+const token = url.replace("https://curso-coder-backend-production.up.railway.app/resetPassword/", "");
 const messagesSection = document.getElementById("messagesSection");
 
 resetPasswordForm.onsubmit = async (e) => {
@@ -18,7 +18,7 @@ async function resetPassword(password) {
     validateResetPasswordForm(password);
 
     const result = await axios.post(
-      `http://localhost:8080/api/users/resetPassword/${token}`,
+      `https://curso-coder-backend-production.up.railway.app/api/users/resetPassword/${token}`,
       password
     );
 
@@ -28,7 +28,7 @@ async function resetPassword(password) {
       err.response &&
       err.response.data.Error === "Reset password token expired"
     ) {
-      location.href = "http://localhost:8080/forgotPassword";
+      location.href = "https://curso-coder-backend-production.up.railway.app/forgotPassword";
     } else if (err.response) {
       alert(`${err.response.data.Error}`);
     } else {
@@ -50,7 +50,7 @@ function validateResetPasswordForm(passwordForm) {
 
   if (!token) {
     throw new Error(
-      "There is no token, go to http://localhost:8080/forgotPassword to sent an email to change your password"
+      "There is no token, go to https://curso-coder-backend-production.up.railway.app/forgotPassword to sent an email to change your password"
     );
   }
 }

@@ -43,7 +43,7 @@ async function getDeveloper() {
 
     if (Cookies.get("token")) {
       response = await axios.get(
-        `http://localhost:8080/api/developers/${developerID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/developers/${developerID}`,
         {
           headers: {
             Authorization: Cookies.get("token"),
@@ -52,7 +52,7 @@ async function getDeveloper() {
       );
     } else {
       response = await axios.get(
-        `http://localhost:8080/api/developers/${developerID}`
+        `https://curso-coder-backend-production.up.railway.app/api/developers/${developerID}`
       );
     }
 
@@ -90,7 +90,7 @@ async function updateDeveloper(newData) {
   try {
     if (Cookies.get("token")) {
       await axios.put(
-        `http://localhost:8080/api/developers/${developerID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/developers/${developerID}`,
         newData,
         {
           headers: {
@@ -100,7 +100,7 @@ async function updateDeveloper(newData) {
       );
     } else {
       await axios.put(
-        `http://localhost:8080/api/developers/${developerID}`,
+        `https://curso-coder-backend-production.up.railway.app/api/developers/${developerID}`,
         newData
       );
     }
@@ -130,7 +130,7 @@ async function compileDeveloper(developer) {
 
   const productsTemplate = developer.products.map(
     (product) => `
-      <a href="http://localhost:8080/products/${product.id}">
+      <a href="https://curso-coder-backend-production.up.railway.app/products/${product.id}">
       <div class="flex flex-col justify-center items-center relative" style="width:200px;height:350px;" >
       <div style="width:50px;height:50px;display:${
         +product.discount ? "flex" : "none"

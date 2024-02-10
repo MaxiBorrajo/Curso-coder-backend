@@ -3,12 +3,12 @@ const urlString = window.location.search;
 const urlParams = new URLSearchParams(urlString);
 const startDate = document.getElementById("startDate");
 const endDate = document.getElementById("endDate");
-let href = "http://localhost:8080/history";
+let href = "https://curso-coder-backend-production.up.railway.app/history";
 
 function compileHistory(carts) {
   const cartsTemplate = carts.map(
     (cart) => `
-      <a href="http://localhost:8080/carts/${cart.id}" class="h-fit">
+      <a href="https://curso-coder-backend-production.up.railway.app/carts/${cart.id}" class="h-fit">
       <div class="p-3 flex items-center justify-between border border-solid border-indigo-500 bg-indigo-50">
       <p class="text-sm secondary-font">ID: ${cart.id}</p>
       <p class="text-sm secondary-font">Code: ${cart.code}</p>
@@ -33,7 +33,7 @@ function compileHistory(carts) {
 
 async function getHistory() {
   try {
-    let url = "http://localhost:8080/api/carts/history?";
+    let url = "https://curso-coder-backend-production.up.railway.app/api/carts/history?";
 
     startDate.value = urlParams.get("startDate");
     endDate.value = urlParams.get("endDate");

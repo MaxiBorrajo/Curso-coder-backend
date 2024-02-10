@@ -11,13 +11,13 @@ async function createDeveloper(newData) {
     }
 
     if (Cookies.get("token")) {
-      await axios.post("http://localhost:8080/api/developers/", newData, {
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/developers/", newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.post("http://localhost:8080/api/developers/", newData);
+      await axios.post("https://curso-coder-backend-production.up.railway.app/api/developers/", newData);
     }
 
     socketClientAdmin.emit("getAllDevelopers");
@@ -43,13 +43,13 @@ async function deleteDeveloper(id) {
     }
 
     if (Cookies.get("token")) {
-      await axios.delete(`http://localhost:8080/api/developers/${id}`, {
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/developers/${id}`, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.delete(`http://localhost:8080/api/developers/${id}`);
+      await axios.delete(`https://curso-coder-backend-production.up.railway.app/api/developers/${id}`);
     }
 
     socketClientAdmin.emit("getAllDevelopers");
@@ -76,7 +76,7 @@ socketClientAdmin.emit("getAllDevelopers");
 function compileDevelopers(developers) {
   const developersTemplate = developers.map(
     (developer) => `
-      <a href="http://localhost:8080/developers/${developer.id}" class="w-full">
+      <a href="https://curso-coder-backend-production.up.railway.app/developers/${developer.id}" class="w-full">
       <div class="p-2 flex items-center gap-x-3 border border-solid border-indigo-500 bg-indigo-50">
       <p class="text-sm secondary-font">ID: ${developer.id}</p>
       <p class="text-sm secondary-font">${developer.developer_name}</p>

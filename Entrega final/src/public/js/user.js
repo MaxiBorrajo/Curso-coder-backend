@@ -35,7 +35,7 @@ roleSelect.onchange = (e) => {
 
 async function getUser() {
   try {
-    const result = await axios.get(`http://localhost:8080/api/users/` + userId);
+    const result = await axios.get(`https://curso-coder-backend-production.up.railway.app/api/users/` + userId);
 
     foundUser = result.data.message;
 
@@ -58,7 +58,7 @@ async function changeRole() {
     let result;
     if (Cookies.get("token")) {
       result = await axios.put(
-        "http://localhost:8080/api/users/admin/" + userId,
+        "https://curso-coder-backend-production.up.railway.app/api/users/admin/" + userId,
         {},
         {
           headers: {
@@ -68,7 +68,7 @@ async function changeRole() {
       );
     } else {
       result = await axios.put(
-        "http://localhost:8080/api/users/admin/" + userId,
+        "https://curso-coder-backend-production.up.railway.app/api/users/admin/" + userId,
         {}
       );
     }
@@ -85,16 +85,16 @@ async function changeRole() {
 async function deleteUser() {
   try {
     if (Cookies.get("token")) {
-      await axios.delete("http://localhost:8080/api/users/" + userId, {
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/users/" + userId, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.delete("http://localhost:8080/api/users/" + userId);
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/users/" + userId);
     }
 
-    location.href = "http://localhost:8080/";
+    location.href = "https://curso-coder-backend-production.up.railway.app/";
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);

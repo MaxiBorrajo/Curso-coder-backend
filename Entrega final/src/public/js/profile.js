@@ -100,7 +100,7 @@ inputProfilePhoto.onchange = (e) => {
 async function getCurrentUser() {
   try {
     const result = await axios.get(
-      `http://localhost:8080/api/sessions/current`
+      `https://curso-coder-backend-production.up.railway.app/api/sessions/current`
     );
 
     Cookies.remove("user");
@@ -146,7 +146,7 @@ async function changeRole() {
     let result;
     if (Cookies.get("token")) {
       result = await axios.put(
-        "http://localhost:8080/api/users/admin/" + userInfo.id,
+        "https://curso-coder-backend-production.up.railway.app/api/users/admin/" + userInfo.id,
         {},
         {
           headers: {
@@ -156,7 +156,7 @@ async function changeRole() {
       );
     } else {
       result = await axios.put(
-        "http://localhost:8080/api/users/admin/" + userInfo.id,
+        "https://curso-coder-backend-production.up.railway.app/api/users/admin/" + userInfo.id,
         {}
       );
     }
@@ -164,7 +164,7 @@ async function changeRole() {
     Cookies.remove("token");
     Cookies.remove("user");
 
-    location.href = "http://localhost:8080/";
+    location.href = "https://curso-coder-backend-production.up.railway.app/";
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);
@@ -179,7 +179,7 @@ async function uploadDocumentation(data) {
     let result;
     if (Cookies.get("token")) {
       result = await axios.post(
-        "http://localhost:8080/api/users/documents",
+        "https://curso-coder-backend-production.up.railway.app/api/users/documents",
         data,
         {
           headers: {
@@ -189,7 +189,7 @@ async function uploadDocumentation(data) {
       );
     } else {
       result = await axios.post(
-        "http://localhost:8080/api/users/documents",
+        "https://curso-coder-backend-production.up.railway.app/api/users/documents",
         data
       );
     }
@@ -207,13 +207,13 @@ async function uploadDocumentation(data) {
 async function updateUser(newData) {
   try {
     if (Cookies.get("token")) {
-      await axios.put("http://localhost:8080/api/users/", newData, {
+      await axios.put("https://curso-coder-backend-production.up.railway.app/api/users/", newData, {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.put("http://localhost:8080/api/users/", newData);
+      await axios.put("https://curso-coder-backend-production.up.railway.app/api/users/", newData);
     }
 
     await getCurrentUser();
@@ -229,19 +229,19 @@ async function updateUser(newData) {
 async function deleteCurrentUser() {
   try {
     if (Cookies.get("token")) {
-      await axios.delete("http://localhost:8080/api/users/", {
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/users/", {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      await axios.delete("http://localhost:8080/api/users/");
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/users/");
     }
 
     Cookies.remove("token");
     Cookies.remove("user");
 
-    location.href = "http://localhost:8080/";
+    location.href = "https://curso-coder-backend-production.up.railway.app/";
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);

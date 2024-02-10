@@ -3,7 +3,7 @@ const actualYear = document.getElementById("actualYear");
 actualYear.innerHTML = new Date().getFullYear();
 const searchBar = document.getElementById("searchBar");
 const cart = document.getElementById("cart");
-cart.href = "http://localhost:8080/login";
+cart.href = "https://curso-coder-backend-production.up.railway.app/login";
 let cartId = 0;
 const login_section = document.getElementById("login-section");
 const authenticated = Cookies.get("token") || Cookies.get("user");
@@ -18,31 +18,31 @@ login_section.innerHTML =
         class="text-white secondary-font cursor-pointer"
         onclick="logout();"
       >Logout</p>
-      <a href="http://localhost:8080/profile">
+      <a href="https://curso-coder-backend-production.up.railway.app/profile">
         <img src="${user.profilePhoto}" class="w-10 h-10 border-2 rounded-full border-orange-600 border-solid" />
       </a>
     </span>
       `
     : `<a
-        href="http://localhost:8080/login"
+        href="https://curso-coder-backend-production.up.railway.app/login"
         class="text-white secondary-font"
       >Login</a>
       <p class="text-white">|</p>
       <a
-        href="http://localhost:8080/register"
+        href="https://curso-coder-backend-production.up.railway.app/register"
         class="text-white secondary-font"
       >Register</a>`;
 
 if (authenticated && user && user.role === "ADMIN") {
   sections.innerHTML =
     sections.innerHTML +
-    "<a href='http://localhost:8080/realtimeProducts' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Product Panel</a>";
+    "<a href='https://curso-coder-backend-production.up.railway.app/realtimeProducts' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Product Panel</a>";
   sections.innerHTML =
     sections.innerHTML +
-    "<a href='http://localhost:8080/realtimeCategories' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Category Panel</a>";
+    "<a href='https://curso-coder-backend-production.up.railway.app/realtimeCategories' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Category Panel</a>";
   sections.innerHTML =
     sections.innerHTML +
-    "<a href='http://localhost:8080/realtimeDevelopers' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Developer Panel</a>";
+    "<a href='https://curso-coder-backend-production.up.railway.app/realtimeDevelopers' class='secondary-font text-indigo-500 hover:bg-orange-600 px-4 py-2 hover:text-white'>Developer Panel</a>";
 }
 
 async function getCartOfCurrentUser() {
@@ -50,20 +50,20 @@ async function getCartOfCurrentUser() {
     let response;
 
     if (Cookies.get("token")) {
-      response = await axios.get("http://localhost:8080/api/carts/", {
+      response = await axios.get("https://curso-coder-backend-production.up.railway.app/api/carts/", {
         headers: {
           Authorization: Cookies.get("token"),
         },
       });
     } else {
-      response = await axios.get("http://localhost:8080/api/carts/");
+      response = await axios.get("https://curso-coder-backend-production.up.railway.app/api/carts/");
     }
 
     cartId = response.data.message.id;
 
     Cookies.set("cartId", cartId);
 
-    cart.href = `http://localhost:8080/carts/${cartId}`;
+    cart.href = `https://curso-coder-backend-production.up.railway.app/carts/${cartId}`;
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);
@@ -80,7 +80,7 @@ if (authenticated) {
 searchBar.onkeyup = (e) => {
   e.preventDefault();
   if (e.keyCode === 13 && searchBar.value) {
-    location.href = `http://localhost:8080/products?filter=keyword&filterValue=${searchBar.value}&page=1`;
+    location.href = `https://curso-coder-backend-production.up.railway.app/products?filter=keyword&filterValue=${searchBar.value}&page=1`;
   }
 };
 
@@ -120,16 +120,16 @@ async function logout() {
     Cookies.remove("cartId");
 
     if (token) {
-      await axios.delete("http://localhost:8080/api/sessions/", {
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/sessions/", {
         headers: {
           Authorization: token,
         },
       });
     } else {
-      await axios.delete("http://localhost:8080/api/sessions/");
+      await axios.delete("https://curso-coder-backend-production.up.railway.app/api/sessions/");
     }
 
-    location.href = "http://localhost:8080/login";
+    location.href = "https://curso-coder-backend-production.up.railway.app/login";
   } catch (err) {
     if (err.response) {
       alert(`${err.response.data.Error}`);

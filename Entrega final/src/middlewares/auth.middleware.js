@@ -6,7 +6,7 @@ async function isAuthenticated(req, res, next) {
   if (req.isAuthenticated() || (await jwtValid(req, res, next))) {
     next();
   } else {
-    res.redirect("http://localhost:8080/login");
+    res.redirect(process.env.URL_FRONTEND + "/login");
   }
 }
 
@@ -14,9 +14,9 @@ async function isNotAuthenticated(req, res, next) {
   if (!req.isAuthenticated() && !(await jwtValid(req, res, next))) {
     next();
   } else if (req.user.role === "ADMIN") {
-    res.redirect("http://localhost:8080/realtimeProducts");
+    res.redirect(process.env.URL_FRONTEND + "/realtimeProducts");
   } else {
-    res.redirect("http://localhost:8080/");
+    res.redirect(process.env.URL_FRONTEND);
   }
 }
 
