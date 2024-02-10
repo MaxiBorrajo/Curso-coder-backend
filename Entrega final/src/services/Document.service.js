@@ -1,5 +1,5 @@
 import DocumentDao from "../dao/DBSystem/Document.dao.js";
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 import { errors } from "../utils/errorDictionary.js";
 
 class DocumentService extends BaseService {

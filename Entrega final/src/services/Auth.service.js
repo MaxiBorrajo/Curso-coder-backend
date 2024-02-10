@@ -1,5 +1,5 @@
 import AuthDao from "../dao/DBSystem/Auth.dao.js"
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 
 class AuthService extends BaseService{
     constructor(){

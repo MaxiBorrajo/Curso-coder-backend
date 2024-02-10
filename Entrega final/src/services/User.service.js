@@ -1,5 +1,5 @@
 import UserDao from "../dao/DBSystem/User.dao.js";
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 import CartService from "./Cart.service.js";
 import AuthService from "./Auth.service.js";
 import { UserDto } from "../dto/User.dto.js";

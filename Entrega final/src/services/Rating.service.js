@@ -1,4 +1,4 @@
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 import RatingDao from "../dao/DBSystem/Rating.dao.js";
 import { Op } from "sequelize";
 import { User } from "../models/user.js";

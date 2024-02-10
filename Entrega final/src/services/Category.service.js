@@ -1,6 +1,6 @@
 import CategoryDao from "../dao/DBSystem/Category.dao.js";
 import { errors } from "../utils/errorDictionary.js";
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 import ProductService from "./Product.service.js";
 
 class CategoryService extends BaseService {

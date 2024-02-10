@@ -1,5 +1,5 @@
-import BaseService from "./base.service.js";
-import ProductService from "./product.service.js";
+import BaseService from "./Base.service.js";
+import ProductService from "./Product.service.js";
 import CartDao from "../dao/DBSystem/Cart.dao.js";
 import { createUniqueToken } from "../utils/utils.js";
 import UserService from "./User.service.js";

@@ -1,5 +1,5 @@
 import developerDao from "../dao/DBSystem/Developer.dao.js";
-import BaseService from "./base.service.js";
+import BaseService from "./Base.service.js";
 import { deleteFileInCloud } from "../middlewares/uploadFiles.middleware.js";
 import { Product } from "../models/product.js";
 
